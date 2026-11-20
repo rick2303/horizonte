@@ -1,0 +1,11 @@
+[browser]
+# No enviar estadísticas de uso a Streamlit.
+gatherUsageStats = false
+
+[client]
+# Los visitantes no ven el menú de desarrollador ni los detalles técnicos de un error.
+toolbarMode = "viewer"
+showErrorDetails = "none"
+
+[server]
+runOnSave = false

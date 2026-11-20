@@ -1,0 +1,5 @@
+# Dependencias de la aplicación publicada (Streamlit Community Cloud usa este
+# archivo porque está junto a app/app.py). La aplicación solo lee app/datos.json,
+# así que no necesita los modelos; requirements.txt de la raíz es para el
+# experimento completo (ejecutar_todo.py).
+streamlit==1.66.1

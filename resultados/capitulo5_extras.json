@@ -1,0 +1,370 @@
+{
+  "descriptivos": {
+    "ipc": {
+      "observaciones": 312,
+      "periodo": "2000-01 a 2025-12",
+      "media": 258.05,
+      "desviacion": 101.11,
+      "cv_pct": 39.2,
+      "minimo": 100.5,
+      "maximo": 464.1,
+      "fecha_maximo": "2025-12",
+      "var_mensual_media_pct": 0.49,
+      "var_mensual_desv_pct": 0.37
+    },
+    "remesas": {
+      "observaciones": 312,
+      "periodo": "2000-01 a 2025-12",
+      "media": 358.18,
+      "desviacion": 265.83,
+      "cv_pct": 74.2,
+      "minimo": 23.17,
+      "maximo": 1166.61,
+      "fecha_maximo": "2025-09",
+      "var_mensual_media_pct": 1.93,
+      "var_mensual_desv_pct": 11.71
+    }
+  },
+  "indices_estacionales": {
+    "ipc": {
+      "1": 0.997,
+      "2": 1.001,
+      "3": 1.001,
+      "4": 1.002,
+      "5": 1.001,
+      "6": 1.001,
+      "7": 1.003,
+      "8": 1.002,
+      "9": 0.999,
+      "10": 0.998,
+      "11": 0.998,
+      "12": 0.997
+    },
+    "remesas": {
+      "1": 0.875,
+      "2": 0.919,
+      "3": 1.022,
+      "4": 1.007,
+      "5": 1.08,
+      "6": 1.005,
+      "7": 1.026,
+      "8": 1.047,
+      "9": 0.987,
+      "10": 1.01,
+      "11": 0.967,
+      "12": 1.055
+    }
+  },
+  "fuerza_estacional_stl": {
+    "ipc": 0.249,
+    "remesas": 0.59
+  },
+  "raiz_unitaria": {
+    "ipc_nivel": {
+      "adf": 3.443,
+      "adf_p": 1.0,
+      "kpss": 2.654,
+      "kpss_p": 0.01
+    },
+    "ipc_dif": {
+      "adf": -7.176,
+      "adf_p": 0.0,
+      "kpss": 0.923,
+      "kpss_p": 0.01
+    },
+    "rem_nivel": {
+      "adf": 2.57,
+      "adf_p": 0.9991,
+      "kpss": 2.371,
+      "kpss_p": 0.01
+    },
+    "rem_dif": {
+      "adf": -1.84,
+      "adf_p": 0.361,
+      "kpss": 0.239,
+      "kpss_p": 0.1
+    },
+    "rem_log": {
+      "adf": -1.513,
+      "adf_p": 0.5272,
+      "kpss": 2.424,
+      "kpss_p": 0.01
+    },
+    "rem_dif_log": {
+      "adf": -2.738,
+      "adf_p": 0.0676,
+      "kpss": 0.164,
+      "kpss_p": 0.1
+    }
+  },
+  "granger": {
+    "rem_causa_ipc": {
+      "p_por_rezago": {
+        "1": 0.415,
+        "2": 0.2976,
+        "3": 0.4113,
+        "4": 0.2334,
+        "5": 0.0618,
+        "6": 0.0379,
+        "7": 0.0538,
+        "8": 0.0719,
+        "9": 0.1144,
+        "10": 0.1645,
+        "11": 0.074,
+        "12": 0.1171
+      },
+      "p_minimo": 0.0379,
+      "rezago_p_minimo": 6,
+      "rechazos_5pct": 1
+    },
+    "ipc_causa_rem": {
+      "p_por_rezago": {
+        "1": 0.0077,
+        "2": 0.05,
+        "3": 0.1117,
+        "4": 0.2086,
+        "5": 0.3385,
+        "6": 0.0365,
+        "7": 0.0292,
+        "8": 0.0554,
+        "9": 0.0181,
+        "10": 0.0265,
+        "11": 0.007,
+        "12": 0.0157
+      },
+      "p_minimo": 0.007,
+      "rezago_p_minimo": 11,
+      "rechazos_5pct": 8
+    }
+  },
+  "shap_por_horizonte": {
+    "ipc": {
+      "1": {
+        "bloques": {
+          "Valores recientes": 99.47,
+          "Promedios móviles": 0.13,
+          "Cambios recientes": 0.27,
+          "Componente estacional": 0.13
+        },
+        "principal": "rezago_1",
+        "principal_pct": 68.91
+      },
+      "3": {
+        "bloques": {
+          "Valores recientes": 98.62,
+          "Promedios móviles": 1.16,
+          "Cambios recientes": 0.16,
+          "Componente estacional": 0.06
+        },
+        "principal": "rezago_1",
+        "principal_pct": 59.21
+      },
+      "6": {
+        "bloques": {
+          "Valores recientes": 98.8,
+          "Promedios móviles": 0.5,
+          "Cambios recientes": 0.61,
+          "Componente estacional": 0.08
+        },
+        "principal": "rezago_1",
+        "principal_pct": 57.0
+      },
+      "12": {
+        "bloques": {
+          "Valores recientes": 98.98,
+          "Promedios móviles": 0.74,
+          "Cambios recientes": 0.13,
+          "Componente estacional": 0.15
+        },
+        "principal": "rezago_1",
+        "principal_pct": 66.06
+      }
+    },
+    "remesas": {
+      "1": {
+        "bloques": {
+          "Valores recientes": 65.34,
+          "Promedios móviles": 29.04,
+          "Cambios recientes": 2.34,
+          "Componente estacional": 3.28
+        },
+        "principal": "rezago_12",
+        "principal_pct": 32.03
+      },
+      "3": {
+        "bloques": {
+          "Valores recientes": 48.19,
+          "Promedios móviles": 43.99,
+          "Cambios recientes": 2.26,
+          "Componente estacional": 5.55
+        },
+        "principal": "media_movil_12",
+        "principal_pct": 29.45
+      },
+      "6": {
+        "bloques": {
+          "Valores recientes": 43.89,
+          "Promedios móviles": 48.09,
+          "Cambios recientes": 1.84,
+          "Componente estacional": 6.18
+        },
+        "principal": "media_movil_12",
+        "principal_pct": 36.33
+      },
+      "12": {
+        "bloques": {
+          "Valores recientes": 49.85,
+          "Promedios móviles": 43.22,
+          "Cambios recientes": 3.38,
+          "Componente estacional": 3.54
+        },
+        "principal": "rezago_1",
+        "principal_pct": 32.19
+      }
+    }
+  },
+  "replica_desagregada": {
+    "observaciones": 96,
+    "especificacion": "SARIMA(2,1,2)(1,0,0)[12] con deriva",
+    "desempeno": [
+      {
+        "Horizonte": 1,
+        "Modelo": "Modelo ingenuo estacional",
+        "MAE": 106.0122,
+        "RMSE": 138.7921,
+        "MAPE": 11.2543,
+        "MASE": 1.1793,
+        "n": 36
+      },
+      {
+        "Horizonte": 1,
+        "Modelo": "ARIMA de referencia",
+        "MAE": 58.7021,
+        "RMSE": 73.008,
+        "MAPE": 6.8092,
+        "MASE": 0.653,
+        "n": 36
+      },
+      {
+        "Horizonte": 1,
+        "Modelo": "Aprendizaje automático",
+        "MAE": 77.7292,
+        "RMSE": 97.2313,
+        "MAPE": 8.581,
+        "MASE": 0.8647,
+        "n": 36
+      },
+      {
+        "Horizonte": 3,
+        "Modelo": "Modelo ingenuo estacional",
+        "MAE": 107.9229,
+        "RMSE": 141.5712,
+        "MAPE": 11.2759,
+        "MASE": 1.2006,
+        "n": 34
+      },
+      {
+        "Horizonte": 3,
+        "Modelo": "ARIMA de referencia",
+        "MAE": 64.4183,
+        "RMSE": 77.2554,
+        "MAPE": 7.4871,
+        "MASE": 0.7166,
+        "n": 34
+      },
+      {
+        "Horizonte": 3,
+        "Modelo": "Aprendizaje automático",
+        "MAE": 97.108,
+        "RMSE": 122.4122,
+        "MAPE": 10.4441,
+        "MASE": 1.0803,
+        "n": 34
+      },
+      {
+        "Horizonte": 6,
+        "Modelo": "Modelo ingenuo estacional",
+        "MAE": 114.4158,
+        "RMSE": 147.3382,
+        "MAPE": 11.909,
+        "MASE": 1.2728,
+        "n": 31
+      },
+      {
+        "Horizonte": 6,
+        "Modelo": "ARIMA de referencia",
+        "MAE": 73.0584,
+        "RMSE": 89.743,
+        "MAPE": 8.4266,
+        "MASE": 0.8127,
+        "n": 31
+      },
+      {
+        "Horizonte": 6,
+        "Modelo": "Aprendizaje automático",
+        "MAE": 136.5555,
+        "RMSE": 168.3902,
+        "MAPE": 14.3119,
+        "MASE": 1.5191,
+        "n": 31
+      },
+      {
+        "Horizonte": 12,
+        "Modelo": "Modelo ingenuo estacional",
+        "MAE": 131.7318,
+        "RMSE": 161.8086,
+        "MAPE": 13.4998,
+        "MASE": 1.4655,
+        "n": 25
+      },
+      {
+        "Horizonte": 12,
+        "Modelo": "ARIMA de referencia",
+        "MAE": 86.3723,
+        "RMSE": 102.8754,
+        "MAPE": 9.8144,
+        "MASE": 0.9609,
+        "n": 25
+      },
+      {
+        "Horizonte": 12,
+        "Modelo": "Aprendizaje automático",
+        "MAE": 159.1588,
+        "RMSE": 186.1957,
+        "MAPE": 16.3657,
+        "MASE": 1.7706,
+        "n": 25
+      }
+    ],
+    "diebold_mariano": [
+      {
+        "Horizonte": "1 mes",
+        "Estadístico": -2.827,
+        "Valor p": 0.0077,
+        "Decisión": "Se rechaza H0",
+        "Modelo favorecido": "Modelo de referencia"
+      },
+      {
+        "Horizonte": "3 meses",
+        "Estadístico": -1.8378,
+        "Valor p": 0.0751,
+        "Decisión": "No se rechaza H0",
+        "Modelo favorecido": "Sin diferencia significativa"
+      },
+      {
+        "Horizonte": "6 meses",
+        "Estadístico": -1.1982,
+        "Valor p": 0.2402,
+        "Decisión": "No se rechaza H0",
+        "Modelo favorecido": "Sin diferencia significativa"
+      },
+      {
+        "Horizonte": "12 meses",
+        "Estadístico": -0.8224,
+        "Valor p": 0.4189,
+        "Decisión": "No se rechaza H0",
+        "Modelo favorecido": "Sin diferencia significativa"
+      }
+    ]
+  }
+}

@@ -1,0 +1,5 @@
+Horizonte,Estadístico,Valor p,Decisión,Modelo favorecido
+1 mes,-3.7657,0.0003,Se rechaza H0,Modelo de referencia
+3 meses,-2.3701,0.0194,Se rechaza H0,Modelo de referencia
+6 meses,-1.8047,0.0737,No se rechaza H0,Sin diferencia significativa
+12 meses,-1.7287,0.0866,No se rechaza H0,Sin diferencia significativa

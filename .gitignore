@@ -1,0 +1,13 @@
+.venv/
+__pycache__/
+*.pyc
+.ipynb_checkpoints/
+
+# Los archivos originales del BCH se quedan en la computadora.
+datos/crudos/*
+!datos/crudos/.gitkeep
+
+# datos/procesados/ y resultados/ SÍ se suben al repositorio: la aplicación
+# publicada en Streamlit Community Cloud los necesita para funcionar.
+# Antes de subirlos, borre datos/procesados/SINTETICO.txt si ya cargó las
+# series reales.

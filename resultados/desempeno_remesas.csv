@@ -1,0 +1,13 @@
+Horizonte,Modelo,MAE,RMSE,MAPE,MASE,n
+1,Modelo ingenuo estacional,76.7744,103.8461,11.5698,3.0717,125
+1,ARIMA de referencia,31.5972,44.9064,5.1436,1.2642,125
+1,Aprendizaje automático,47.4757,67.352,7.3505,1.8995,125
+3,Modelo ingenuo estacional,77.5153,104.5939,11.611,3.1014,123
+3,ARIMA de referencia,36.9232,52.368,6.0401,1.4773,123
+3,Aprendizaje automático,64.979,90.0978,9.88,2.5998,123
+6,Modelo ingenuo estacional,79.1908,105.8796,11.8258,3.1684,120
+6,ARIMA de referencia,45.2442,64.7549,7.2209,1.8102,120
+6,Aprendizaje automático,83.7698,115.6779,12.5092,3.3516,120
+12,Modelo ingenuo estacional,82.369,108.4923,12.1631,3.2956,114
+12,ARIMA de referencia,51.3715,76.7689,7.5831,2.0554,114
+12,Aprendizaje automático,99.5528,130.9131,14.2885,3.9831,114

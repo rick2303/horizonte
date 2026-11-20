@@ -1,0 +1,11 @@
+{
+  "especificacion_arima": "SARIMA(2,1,0)(1,0,1)[12] con deriva",
+  "escala_mase": 24.993946164171437,
+  "ventana_inicial": 187,
+  "sobreajuste": {
+    "MAE en entrenamiento": 7.5295,
+    "MAE fuera de muestra": 47.4757,
+    "Razón entrenamiento/fuera": 0.1586
+  },
+  "variacion": false
+}
