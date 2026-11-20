@@ -83,6 +83,8 @@ pantalla en segundos sin repetir el experimento.
 1. Suba la carpeta a GitHub, incluidos `datos/procesados/`, `resultados/` y `app/datos.json`.
 2. En share.streamlit.io elija el repositorio y como archivo principal `app/app.py`.
 
+**Versión estática (GitHub Pages).** `docs/index.html` es una copia de `app/tablero.html` con los datos incluidos; GitHub Pages la publica sin los íconos de Streamlit. En GitHub: Settings → Pages → Deploy from a branch → `main` y carpeta `/docs`. Cada vez que cambie la plantilla o los datos, regenere `app/tablero.html` y cópielo a `docs/index.html`.
+
 ## Paso 5. Calcular la escala SUS
 
 Registre las respuestas en Excel, una fila por participante y columnas P1 a P10:

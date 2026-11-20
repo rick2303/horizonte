@@ -1,0 +1,1826 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Horizonte · Proyecciones de precios y remesas de Honduras</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600;700&family=Source+Serif+4:opsz,wght@8..60,600;8..60,700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --accent:#1F5FAE; --accent-dark:#143F75; --ml:#B4500C;
+  --navy:#0B2545; --navy-2:#12315C; --sky:#8FB8EA; --sky-2:#BFD3EE;
+  --good:#1E9E6A; --good-bg:#E7F6EE; --bad:#D9480F; --bad-bg:#FDEEE6; --amber:#E8A317;
+  --ink:#1B1F24; --ink-2:#3D4651; --muted:#5B6470;
+  --line:#DDE1E6; --line-2:#E7EAEE; --line-3:#EEF0F3; --control:#C5CBD3;
+  --bg:#F4F5F7; --card:#FFFFFF; --soft:#EEF3FA; --soft-line:#C9D7EA;
+  --warn-bg:#FDF3EA; --warn-line:#F0C9A8; --warn-ink:#8A3D09;
+  --ok-bg:#EDF7F0; --ok-line:#BFDCC8; --ok-ink:#1E5B33;
+  --mono:'IBM Plex Mono', ui-monospace, monospace;
+  --serif:'Source Serif 4', Georgia, 'Times New Roman', serif;
+  --track:#F7F8FA; --track-2:#F2F4F7; --row-hl:#F7F9FC; --dot:#9AA4B2; --on-accent:#fff;
+  --good-ink:#14633F; --bad-ink:#9A3208; --amber-bg:#FFF4DB; --amber-ink:#7A5200; --nav-bg:#fff;
+  color-scheme:light;
+}
+:root[data-theme="oscuro"]{
+  --bg:#0D1520; --card:#15202D; --ink:#E8EEF6; --ink-2:#C2CDDB; --muted:#94A3B6;
+  --line:#2A3849; --line-2:#233040; --line-3:#1E2A38; --control:#3B4C61;
+  --soft:#172A40; --soft-line:#2C4767; --accent:#5AA2F0; --accent-dark:#A5CDFA; --ml:#F0883E;
+  --good:#3CC68A; --good-bg:#12291E; --bad:#FF7A45; --bad-bg:#33190F;
+  --warn-bg:#2E2012; --warn-line:#6A4421; --warn-ink:#F3B27A;
+  --ok-bg:#12291E; --ok-line:#2B6143; --ok-ink:#86D8AA;
+  --track:#1D2937; --track-2:#1D2937; --row-hl:#1A2A3C; --dot:#6D7F96; --on-accent:#06213D;
+  --good-ink:#86D8AA; --bad-ink:#FFA277; --amber-bg:#332A10; --amber-ink:#F0C060; --nav-bg:#101B28;
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);font-family:'IBM Plex Sans',system-ui,sans-serif;color:var(--ink)}
+a{color:var(--accent)}a:hover{color:var(--accent-dark)}
+button{font-family:inherit}
+button:focus-visible,summary:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,[data-tx]:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.wrap{max-width:1360px;margin:0 auto}
+.hidden{display:none !important}
+
+/* ---------- Pantalla de carga ---------- */
+#cargando{position:fixed;inset:0;z-index:100;background:radial-gradient(900px 420px at 50% 0%,#1D4E89 0%,transparent 70%),var(--navy);display:flex;flex-direction:column;align-items:center;justify-content:flex-start;padding-top:min(26vh,190px);gap:20px;color:#fff;cursor:pointer;transition:opacity .55s ease,visibility .55s}
+#cargando.fuera{opacity:0;visibility:hidden}
+#cargando .marca{width:96px;height:96px}
+#cargando .nom{font-family:var(--serif);font-size:44px;font-weight:700;letter-spacing:-.02em;line-height:1;opacity:0;animation:aparece .7s .5s ease forwards}
+#cargando .lema{font-size:15px;color:var(--sky-2);opacity:0;animation:aparece .7s .8s ease forwards;text-align:center;padding:0 24px}
+#cargando .barra{width:220px;height:3px;border-radius:3px;background:rgba(255,255,255,.16);overflow:hidden;margin-top:6px}
+#cargando .barra i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--sky),#fff);animation:llena 1.3s .15s ease-out forwards}
+#cargando .paso{font-size:12px;color:var(--sky);min-height:16px}
+.m-linea{stroke-dasharray:140;stroke-dashoffset:140;animation:traza 1.1s .15s ease-out forwards}
+.m-sol{opacity:0;animation:aparece .6s .9s ease forwards}
+@keyframes traza{to{stroke-dashoffset:0}}
+@keyframes aparece{to{opacity:1}}
+@keyframes llena{to{width:100%}}
+
+/* ---------- Barra de navegación ---------- */
+.topnav{background:var(--nav-bg);border-bottom:1px solid var(--line);position:sticky;top:0;z-index:30}
+.topnav .in{display:flex;align-items:center;gap:6px 28px;flex-wrap:wrap;padding:10px 24px}
+.brand{display:flex;align-items:center;gap:10px;background:none;border:0;padding:0;cursor:pointer;color:var(--ink);text-align:left}
+.brand svg{flex:none}
+.brand .nm{font-family:var(--serif);font-size:23px;font-weight:700;letter-spacing:-.015em;line-height:1}
+.brand .tg{font-size:11px;color:var(--muted);margin-top:3px;line-height:1.1}
+.links{display:flex;gap:2px;flex:1 1 auto;flex-wrap:wrap}
+.lk{min-height:44px;padding:0 14px;background:none;border:0;border-bottom:3px solid transparent;cursor:pointer;font-size:14px;font-weight:500;color:var(--ink-2);white-space:nowrap}
+.lk:hover{color:var(--accent)}
+.lk[aria-current="page"]{color:var(--accent);font-weight:600;border-bottom-color:var(--accent)}
+.topnav.pegada{box-shadow:0 2px 10px rgba(0,0,0,.14)}
+.nav-r{display:flex;align-items:center;gap:10px;margin-left:auto}
+.tema{width:42px;height:42px;border-radius:50%;border:1px solid var(--control);background:var(--card);color:var(--ink);cursor:pointer;display:inline-flex;align-items:center;justify-content:center;padding:0}
+.tema:hover{border-color:var(--accent);color:var(--accent)}
+.tema svg{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.tema .sol{display:none}
+:root[data-theme="oscuro"] .tema .sol{display:block}
+:root[data-theme="oscuro"] .tema .luna{display:none}
+.pill{padding:4px 10px;border:1px solid var(--line);border-radius:999px;font-size:12px;color:var(--muted);white-space:nowrap;background:var(--card)}
+.pill.warn{border-color:var(--warn-line);background:var(--warn-bg);color:var(--warn-ink)}
+.pill.ok{border-color:var(--soft-line);background:var(--soft);color:var(--accent-dark)}
+.page{animation:entra .35s ease both}
+@keyframes entra{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+
+/* ---------- Inicio ---------- */
+.hero{background:radial-gradient(1100px 520px at 88% -8%,#235A9E 0%,transparent 62%),radial-gradient(700px 360px at -5% 105%,#0E6B5E 0%,transparent 60%),linear-gradient(180deg,#0B2545 0%,#0D2A50 100%);color:#fff}
+.hero .in{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:44px;padding:58px 24px 66px;align-items:center}
+.hero h1{font-family:var(--serif);font-size:clamp(34px,4.6vw,56px);line-height:1.06;letter-spacing:-.025em;margin:0;font-weight:700}
+.hero .sub{font-size:17px;line-height:1.65;color:var(--sky-2);max-width:44ch;margin:20px 0 0}
+.hero .cta{display:flex;flex-wrap:wrap;gap:10px;margin-top:28px}
+.btn{min-height:46px;padding:0 20px;border-radius:9px;font-size:15px;font-weight:600;cursor:pointer;border:1px solid transparent;display:inline-flex;align-items:center;gap:8px}
+.btn.pri{background:#fff;color:var(--navy)}
+.btn.pri:hover{background:var(--soft)}
+.btn.sec{background:transparent;color:#fff;border-color:rgba(255,255,255,.4)}
+.btn.sec:hover{background:rgba(255,255,255,.1)}
+.btn.azul{background:var(--accent);color:var(--on-accent)}
+.btn.azul:hover{background:var(--accent-dark)}
+.btn.suave{background:var(--card);color:var(--accent);border-color:var(--soft-line)}
+.btn.suave:hover{background:var(--soft)}
+.hero .conf{display:flex;flex-wrap:wrap;gap:8px 22px;margin:30px 0 0;padding:0;list-style:none;font-size:13px;color:var(--sky-2)}
+.hero .conf li{display:flex;align-items:center;gap:7px}
+.hero .conf svg{flex:none;stroke:var(--sky);fill:none;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round}
+.hpanel{background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.16);border-radius:16px;padding:20px 20px 18px;min-width:0}
+.hpanel .top{display:flex;flex-wrap:wrap;gap:10px 16px;justify-content:space-between;align-items:center}
+.seg{display:inline-flex;border:1px solid rgba(255,255,255,.28);border-radius:9px;overflow:hidden}
+.seg button{min-height:36px;padding:0 14px;background:transparent;border:0;color:var(--sky-2);font-size:13px;font-weight:600;cursor:pointer}
+.seg button[aria-pressed="true"]{background:#fff;color:var(--navy)}
+.seg.claro{border-color:var(--control)}
+.seg.claro button{color:var(--ink-2)}
+.seg.claro button[aria-pressed="true"]{background:var(--accent);color:var(--on-accent)}
+.hread{display:flex;flex-wrap:wrap;align-items:baseline;gap:4px 14px;margin-top:14px}
+.hread .big{font-family:var(--mono);font-size:34px;font-weight:500;letter-spacing:-.02em}
+.hread .chg{font-size:15px;font-weight:600;padding:2px 9px;border-radius:999px}
+.hread .chg.up-good,.chg.up-good{background:rgba(48,200,140,.2);color:#6FE3B0}
+.hread .chg.up-bad,.chg.up-bad{background:rgba(255,120,60,.2);color:#FFA575}
+.hread .rng{font-size:13px;color:var(--sky-2)}
+.hslide{display:flex;align-items:center;gap:14px;margin-top:6px;flex-wrap:wrap}
+.hslide label{font-size:13px;color:var(--sky-2);flex:none}
+input[type=range]{flex:1 1 180px;min-width:140px;accent-color:#7FB5FF;height:32px;cursor:pointer}
+.hmeta{font-size:12px;color:var(--sky);margin-top:10px;line-height:1.5}
+.sec-t{font-family:var(--serif);font-size:clamp(24px,2.6vw,32px);line-height:1.15;letter-spacing:-.015em;margin:0;font-weight:700}
+.sec-s{margin:10px 0 0;font-size:16px;line-height:1.6;color:var(--ink-2);max-width:62ch}
+.band{padding:48px 24px}
+.figs{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:14px;margin-top:22px}
+.fig{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:18px 18px 16px;border-top:4px solid var(--accent)}
+.fig.bad{border-top-color:var(--bad)}.fig.good{border-top-color:var(--good)}.fig.ml{border-top-color:var(--ml)}
+.fig .k{font-size:13px;color:var(--muted);line-height:1.35;min-height:35px}
+.fig .v{font-family:var(--mono);font-size:32px;font-weight:500;margin-top:8px;letter-spacing:-.02em}
+.fig .n{font-size:12.5px;color:var(--ink-2);margin-top:6px;line-height:1.5}
+.feat{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:14px;margin-top:22px}
+.fc{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:20px;display:flex;flex-direction:column;gap:10px;text-align:left;cursor:pointer;color:var(--ink);transition:border-color .15s,box-shadow .15s}
+.fc:hover{border-color:var(--accent);box-shadow:0 6px 20px rgba(31,95,174,.12)}
+.fc .ic{width:44px;height:44px;border-radius:11px;display:flex;align-items:center;justify-content:center;background:var(--soft)}
+.fc .ic svg{stroke:var(--accent);fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.fc h3{margin:0;font-size:17px;font-weight:600}
+.fc p{margin:0;font-size:14px;line-height:1.55;color:var(--ink-2);flex:1}
+.fc .go{font-size:14px;font-weight:600;color:var(--accent)}
+.how{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,260px),1fr));gap:0;margin-top:24px;border:1px solid var(--line);border-radius:12px;background:var(--card);overflow:hidden}
+.how>div{padding:22px;border-right:1px solid var(--line-2)}
+.how>div:last-child{border-right:0}
+.how .n{width:30px;height:30px;border-radius:50%;background:var(--navy);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:600;font-size:14px}
+.how h3{margin:12px 0 6px;font-size:16px}
+.how p{margin:0;font-size:14px;line-height:1.6;color:var(--ink-2)}
+.two{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,320px),1fr));gap:14px;margin-top:18px}
+.panel{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:20px}
+.panel h3{margin:0 0 4px;font-size:16px;font-weight:600}
+.dark-band{background:var(--navy);color:#fff}
+.foot{background:var(--navy);color:var(--sky-2);padding:34px 24px 40px;font-size:13px;line-height:1.7}
+.foot .grid3{display:grid;grid-template-columns:minmax(0,2fr) minmax(0,1fr) minmax(0,1fr);gap:28px}
+.foot b{color:#fff;font-weight:600;display:block;margin-bottom:6px}
+.foot a{color:var(--sky-2)}
+.foot .nm{font-family:var(--serif);font-size:24px;font-weight:700;color:#fff;letter-spacing:-.01em}
+.foot .lgl{margin-top:22px;padding-top:16px;border-top:1px solid rgba(255,255,255,.14);font-size:12px;color:var(--sky)}
+
+/* ---------- Pantalla Proyección (panel + pestañas) ---------- */
+.layout{padding:24px;display:flex;flex-wrap:wrap;gap:24px;align-items:flex-start}
+aside{flex:1 1 260px;background:var(--card);border:1px solid var(--line);border-radius:10px;padding:20px;display:flex;flex-direction:column;gap:22px}
+.step{font-size:12px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);margin-bottom:10px;display:flex;align-items:center;gap:6px}
+.opt{text-align:left;min-height:44px;padding:10px 12px;border-radius:8px;cursor:pointer;color:var(--ink);border:1px solid var(--control);background:var(--card);margin:1px;width:calc(100% - 2px)}
+.opt[aria-pressed="true"]{border:2px solid var(--accent);background:var(--soft);margin:0;width:100%}
+.opt .l{display:flex;align-items:center;gap:8px;font-size:14px;font-weight:600}
+.opt .s{display:block;font-size:12px;color:var(--muted);margin-top:2px;line-height:1.4}
+.dot{width:10px;height:10px;border-radius:50%;display:inline-block;flex:none}
+.hgrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:6px}
+.hbtn{min-height:44px;border-radius:8px;cursor:pointer;font-size:13px;font-weight:600;background:var(--card);color:var(--ink);border:1px solid var(--control);line-height:1.2}
+.hbtn small{display:block;font-weight:400;font-size:11px;opacity:.8}
+.hbtn[aria-pressed="true"]{background:var(--accent);color:var(--on-accent);border-color:var(--accent)}
+.note{font-size:12px;color:var(--muted);margin-top:6px;line-height:1.5}
+.download{min-height:44px;border-radius:8px;border:1px solid var(--control);background:var(--card);color:var(--ink);font-size:14px;font-weight:500;cursor:pointer}
+.download:hover{border-color:var(--accent);color:var(--accent)}
+main{flex:999 1 560px;min-width:0;display:flex;flex-direction:column;gap:20px}
+.tabs{display:flex;flex-wrap:wrap;gap:4px;border-bottom:1px solid var(--line)}
+.tab{min-height:44px;padding:0 16px;background:transparent;border:none;cursor:pointer;font-size:14px;margin-bottom:-1px;color:var(--ink-2);font-weight:500;border-bottom:2px solid transparent}
+.tab .n{display:inline-flex;align-items:center;justify-content:center;width:20px;height:20px;border-radius:50%;background:var(--line-2);color:var(--ink-2);font-size:11px;font-weight:600;margin-right:6px}
+.tab[aria-selected="true"]{color:var(--accent);font-weight:600;border-bottom-color:var(--accent)}
+.tab[aria-selected="true"] .n{background:var(--accent);color:var(--on-accent)}
+.card{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:20px}
+.card h2{margin:0;font-size:16px;font-weight:600;display:flex;align-items:center;gap:6px;flex-wrap:wrap}
+.lead{margin:6px 0 0;font-size:14px;color:var(--ink-2);line-height:1.6}
+.callout{background:var(--soft);border:1px solid var(--soft-line);border-radius:10px;padding:18px 20px}
+.callout.ok{background:var(--ok-bg);border-color:var(--ok-line)}
+.callout.warn{background:var(--warn-bg);border-color:var(--warn-line);color:var(--warn-ink)}
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:12px}
+.kpi{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:16px;border-top:3px solid var(--line)}
+.kpi .k{font-size:12px;color:var(--muted);display:flex;align-items:center;gap:4px}
+.kpi .v{font-family:var(--mono);font-size:26px;font-weight:500;margin-top:6px;letter-spacing:-.01em}
+.kpi .n{font-size:12px;color:var(--muted);margin-top:4px;line-height:1.4}
+.up-good-t{color:var(--good)}.up-bad-t{color:var(--bad)}
+.legend{display:flex;flex-wrap:wrap;gap:8px 16px;font-size:12px;color:var(--muted);align-items:center}
+.legend span{display:flex;align-items:center;gap:6px}
+.switch{display:inline-flex;align-items:center;gap:8px;font-size:13px;color:var(--ink-2);cursor:pointer;min-height:36px}
+.switch input{width:18px;height:18px;accent-color:var(--accent)}
+
+/* Gráfico */
+.chart-row{display:flex;gap:8px;margin-top:16px;padding-right:58px}
+.yaxis{position:relative;width:64px;height:280px;flex:none}
+.yaxis div{position:absolute;right:0;transform:translateY(-50%);font-family:var(--mono);font-size:11px;color:var(--muted)}
+.plot{position:relative;height:280px;border-left:1px solid var(--control);border-bottom:1px solid var(--control)}
+.reveal{position:absolute;inset:0}
+.reveal.anim{animation:revela 1.5s .1s cubic-bezier(.3,.7,.2,1) both}
+@keyframes revela{from{clip-path:inset(0 100% 0 0)}to{clip-path:inset(0 0 0 0)}}
+.grid{position:absolute;left:0;right:0;border-top:1px dashed var(--line-2)}
+.split{position:absolute;top:0;bottom:0;border-left:1px dashed var(--muted)}
+.split-l{position:absolute;top:6px;padding-left:6px;font-size:11px;color:var(--muted);white-space:nowrap}
+.xaxis{position:relative;height:22px;margin-top:6px}
+.xaxis div{position:absolute;transform:translateX(-50%);font-size:11px;color:var(--muted);white-space:nowrap}
+.mk{position:absolute;width:9px;height:9px;border-radius:50%;transform:translate(-50%,-50%);border:2px solid var(--card);pointer-events:none}
+.endtag{position:absolute;transform:translate(8px,-50%);padding:2px 8px;border-radius:6px;font-family:var(--mono);font-size:12px;font-weight:500;color:var(--on-tag,#fff);white-space:nowrap;pointer-events:none}
+.hover-line{position:absolute;top:0;bottom:0;border-left:1px solid var(--muted);pointer-events:none;display:none}
+.hover-dot{position:absolute;width:9px;height:9px;border-radius:50%;transform:translate(-50%,-50%);border:2px solid var(--card);pointer-events:none;display:none}
+.tip{position:absolute;top:8px;background:var(--card);color:var(--ink);border:1px solid var(--line);border-radius:8px;padding:8px 10px;font-size:12px;box-shadow:0 4px 14px rgba(27,31,36,.12);pointer-events:none;display:none;min-width:160px;z-index:2}
+.tip .m{font-weight:600;margin-bottom:4px}
+.tip .r{display:flex;justify-content:space-between;gap:12px;color:var(--ink-2)}
+.tip .r b{font-family:var(--mono);font-weight:500;color:var(--ink)}
+.dark .yaxis div,.dark .xaxis div,.dark .split-l{color:#9FB4D0}
+.dark .plot{border-color:rgba(255,255,255,.25)}
+.dark .grid{border-color:rgba(255,255,255,.1)}
+.dark .split{border-color:rgba(255,255,255,.35)}
+.dark .mk{border-color:#0D2A50}
+.dark .hover-line{border-color:rgba(255,255,255,.5)}
+.dark .hover-dot{border-color:#0D2A50}
+.chart-help{margin:12px 0 0;font-size:13px;color:var(--ink-2);line-height:1.6}
+.boxes{display:flex;flex-wrap:wrap;gap:12px;margin-top:18px;align-items:stretch}
+.box{flex:1 1 180px;border:1px solid var(--line);border-radius:8px;padding:12px 14px}
+.box.hl{border-color:var(--soft-line);background:var(--soft)}
+.box .k{font-size:12px;color:var(--muted)}
+.box.hl .k{color:var(--ink-2)}
+.box .v{font-family:var(--mono);font-size:20px;margin-top:4px}
+.box .e{font-size:12px;color:var(--muted);margin-top:4px;line-height:1.4}
+.op{display:flex;align-items:center;font-family:var(--mono);font-size:20px;color:var(--muted)}
+.steps3{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:10px;margin-top:14px}
+.s3{display:flex;gap:10px;align-items:flex-start;font-size:13px;line-height:1.5;color:var(--ink-2)}
+.s3 b{display:inline-flex;align-items:center;justify-content:center;flex:none;width:22px;height:22px;border-radius:50%;background:var(--soft);border:1px solid var(--soft-line);color:var(--accent-dark);font-size:12px}
+.dir{display:flex;justify-content:space-between;font-size:12px;color:var(--muted);margin-top:22px;padding-left:260px}
+.dir .up{color:var(--warn-ink)}.dir .dn{color:var(--accent-dark)}
+.frow{display:flex;align-items:center;gap:12px;min-height:48px}
+.fname{width:248px;flex:none}
+.fname .a{font-size:13px;font-weight:600}
+.fname .b{font-size:12px;color:var(--muted);line-height:1.4}
+.ftrack{position:relative;flex:1 1 auto;height:32px;background:var(--track);border-radius:4px}
+.ftrack .mid{position:absolute;left:50%;top:0;bottom:0;border-left:1px solid var(--control)}
+.ftrack .bar{position:absolute;top:7px;height:18px;border-radius:3px}
+.fval{width:84px;flex:none;text-align:right;font-family:var(--mono);font-size:13px}
+table{width:100%;min-width:520px;border-collapse:collapse;font-size:13px}
+th{padding:10px 12px;border-bottom:1px solid var(--line);font-weight:600;text-align:left;color:var(--muted);white-space:nowrap}
+td{padding:10px 12px;border-bottom:1px solid var(--line-3);vertical-align:top}
+tr:last-child td{border-bottom:none}
+.num{text-align:right;font-family:var(--mono)}
+th.num{font-family:inherit}
+.best{font-weight:600;color:var(--ink)}
+.tpill{display:inline-block;padding:3px 10px;border-radius:999px;font-size:12px;border:1px solid}
+.tpill.ml{background:var(--warn-bg);color:var(--warn-ink);border-color:var(--warn-line)}
+.tpill.ac{background:var(--soft);color:var(--accent-dark);border-color:var(--soft-line)}
+.tpill.ne{background:var(--bg);color:var(--muted);border-color:var(--line)}
+tr.hl-row{background:var(--row-hl)}
+.facts{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px}
+.fact{border:1px solid var(--line);border-radius:8px;padding:14px}
+.fact .k{font-size:12px;color:var(--muted)}
+.fact div+div{margin-top:4px}
+
+/* Ayudas */
+[data-tx]{cursor:help;text-decoration:underline dotted var(--dot);text-underline-offset:4px;text-decoration-thickness:1px}
+.fig[data-tx],.kpi[data-tx],.box[data-tx],.panel[data-tx],.tip [data-tx]{text-decoration:none}
+tr[data-tx]{text-decoration:none}
+.q{display:inline-flex;align-items:center;justify-content:center;width:18px;height:18px;border-radius:50%;border:1px solid var(--control);background:var(--card);color:var(--muted);font-size:11px;font-weight:600;cursor:pointer;padding:0;line-height:1;flex:none;text-transform:none;letter-spacing:0;vertical-align:middle;text-decoration:none}
+.q:hover,.q[aria-expanded="true"]{border-color:var(--accent);color:var(--accent);background:var(--soft)}
+#pop,#tt{position:absolute;z-index:60;background:var(--card);border:1px solid var(--line);border-radius:10px;box-shadow:0 10px 30px rgba(27,31,36,.18);font-size:13px;line-height:1.55;color:var(--ink-2);display:none}
+#pop{max-width:320px;padding:14px 16px;z-index:50}
+#tt{position:fixed;max-width:300px;padding:11px 13px;pointer-events:none;border-color:var(--soft-line)}
+#pop .t,#tt .t{font-weight:600;color:var(--ink);margin-bottom:3px;font-size:13.5px}
+#pop .x{margin-top:8px;padding-top:8px;border-top:1px solid var(--line-3);font-size:12px;color:var(--muted)}
+.guide{background:var(--card);border:1px solid var(--soft-line);border-left:4px solid var(--accent);border-radius:10px;padding:16px 18px}
+.guide h3{margin:0;font-size:15px}
+.guide ol{margin:8px 0 0;padding-left:20px;font-size:13px;line-height:1.7;color:var(--ink-2)}
+.guide .close{float:right;border:none;background:none;color:var(--muted);font-size:13px;cursor:pointer;min-height:32px}
+.verdict{display:flex;gap:14px;align-items:flex-start}
+.verdict .big{font-size:17px;font-weight:600;line-height:1.4;margin:0}
+.ebar{display:grid;grid-template-columns:190px 1fr 150px;gap:12px;align-items:center;min-height:40px}
+.ebar.eb2{grid-template-columns:170px 1fr 130px}
+.ebar .lab{font-size:13px;font-weight:600;display:flex;align-items:center;gap:8px}
+.ebar .trk{height:22px;background:var(--track);border-radius:4px;position:relative}
+.ebar .fill{position:absolute;left:0;top:0;bottom:0;border-radius:4px}
+.ebar .val{font-size:13px;color:var(--ink-2);white-space:nowrap}
+.ebar .val b{font-family:var(--mono);font-weight:500;color:var(--ink)}
+details{margin-top:4px}
+summary{cursor:pointer;font-size:14px;font-weight:600;color:var(--accent);min-height:36px;display:flex;align-items:center}
+.gl{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,260px),1fr));gap:10px 18px;margin-top:10px}
+.gl div{border-top:1px solid var(--line-3);padding-top:10px;font-size:13px;line-height:1.55;color:var(--ink-2)}
+.gl b{display:block;color:var(--ink);font-size:14px;margin-bottom:2px}
+.check{display:inline-flex;width:18px;height:18px;border-radius:50%;align-items:center;justify-content:center;font-size:11px;font-weight:700}
+.check.si{background:var(--ok-bg);color:var(--ok-ink);border:1px solid var(--ok-line)}
+.check.no{background:var(--warn-bg);color:var(--warn-ink);border:1px solid var(--warn-line)}
+
+/* ---------- Recomendaciones ---------- */
+.pagehead{background:linear-gradient(180deg,var(--card) 0%,var(--soft) 100%);border-bottom:1px solid var(--line)}
+.pagehead .in{padding:34px 24px 30px}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:18px}
+.chip{min-height:42px;padding:0 16px;border-radius:999px;border:1px solid var(--control);background:var(--card);font-size:14px;font-weight:600;color:var(--ink);cursor:pointer}
+.chip:hover{border-color:var(--accent)}
+.chip[aria-pressed="true"]{background:var(--accent);border-color:var(--accent);color:var(--on-accent)}
+.pan2{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr));gap:14px}
+.pan{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:20px;border-left:5px solid var(--accent)}
+.pan.good{border-left-color:var(--good)}.pan.bad{border-left-color:var(--bad)}.pan.mid{border-left-color:var(--amber)}
+.pan .st{display:inline-block;padding:3px 10px;border-radius:999px;font-size:12px;font-weight:600;background:var(--soft);color:var(--accent-dark)}
+.pan.good .st{background:var(--good-bg);color:var(--good-ink)}.pan.bad .st{background:var(--bad-bg);color:var(--bad-ink)}.pan.mid .st{background:var(--amber-bg);color:var(--amber-ink)}
+.pan .big{font-family:var(--mono);font-size:30px;font-weight:500;margin:10px 0 2px;letter-spacing:-.02em}
+.pan p{margin:6px 0 0;font-size:14px;line-height:1.6;color:var(--ink-2)}
+.acts{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,360px),1fr));gap:14px;margin-top:18px}
+.act{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:18px 18px 16px;display:flex;flex-direction:column;gap:8px}
+.act h3{margin:0;font-size:15.5px;font-weight:600;line-height:1.35}
+.act p{margin:0;font-size:14px;line-height:1.6;color:var(--ink-2)}
+.act .when{font-size:12px;font-weight:600;color:var(--accent-dark);background:var(--soft);padding:2px 9px;border-radius:999px;align-self:flex-start}
+.act .go{align-self:flex-start;margin-top:2px;background:none;border:0;padding:0;color:var(--accent);font-weight:600;font-size:14px;cursor:pointer;min-height:32px}
+.scen{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin-top:12px}
+.scen>div{border:1px solid var(--line);border-radius:10px;padding:12px 14px;background:var(--card)}
+.scen .k{font-size:12px;color:var(--muted)}
+.scen .v{font-family:var(--mono);font-size:19px;margin-top:3px}
+
+/* ---------- Calculadora ---------- */
+.calc{display:grid;grid-template-columns:minmax(300px,380px) minmax(0,1fr);gap:20px;align-items:start}
+.field{display:flex;flex-direction:column;gap:6px;margin-bottom:16px}
+.field label,.field .lb{font-size:13px;font-weight:600;color:var(--ink-2)}
+.field select,.field input[type=text],.field input[type=number]{min-height:44px;border:1px solid var(--control);border-radius:8px;padding:0 12px;font-size:15px;font-family:inherit;background:var(--card);color:var(--ink);width:100%}
+.field .row2{display:grid;grid-template-columns:1.3fr 1fr;gap:8px}
+.monto{display:flex;align-items:center;border:1px solid var(--control);border-radius:8px;background:var(--card);overflow:hidden}
+.monto span{padding:0 12px;color:var(--muted);font-family:var(--mono);background:var(--line-3);align-self:stretch;display:flex;align-items:center}
+.monto input{border:0 !important;border-radius:0 !important;font-family:var(--mono) !important;font-size:18px !important}
+.presets{display:flex;flex-wrap:wrap;gap:6px}
+.presets button{min-height:36px;padding:0 12px;border-radius:999px;border:1px solid var(--control);background:var(--card);font-size:13px;cursor:pointer;color:var(--ink-2)}
+.presets button:hover{border-color:var(--accent);color:var(--accent)}
+.res-big{font-family:var(--mono);font-size:clamp(30px,4vw,44px);font-weight:500;letter-spacing:-.02em;margin:6px 0 0}
+.res-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:10px;margin-top:16px}
+.res-grid>div{border:1px solid var(--line);border-radius:10px;padding:12px 14px;background:var(--card)}
+.res-grid .k{font-size:12px;color:var(--muted)}
+.res-grid .v{font-family:var(--mono);font-size:20px;margin-top:4px}
+.cmp{display:flex;flex-direction:column;gap:8px;margin-top:16px}
+.cmp .r{display:grid;grid-template-columns:150px 1fr 120px;gap:10px;align-items:center;font-size:13px}
+.cmp .t{height:22px;background:var(--track-2);border-radius:4px;position:relative}
+.cmp .t i{position:absolute;left:0;top:0;bottom:0;border-radius:4px;transition:width .5s ease}
+.years{display:flex;align-items:flex-end;gap:5px;height:180px;margin-top:14px;padding-bottom:0;border-bottom:1px solid var(--control)}
+.years .c{flex:1 1 0;min-width:0;display:flex;flex-direction:column;justify-content:flex-end;align-items:center;height:100%}
+.years .b{width:100%;border-radius:3px 3px 0 0;min-height:2px;transition:height .5s ease}
+.years .b.pr{background-image:repeating-linear-gradient(45deg,rgba(255,255,255,.55) 0 3px,transparent 3px 6px)}
+.ylab{display:flex;gap:5px;margin-top:6px}
+.ylab span{flex:1 1 0;min-width:0;text-align:center;font-size:10px;color:var(--muted)}
+.proj-chip{display:inline-block;padding:3px 10px;border-radius:999px;font-size:12px;font-weight:600;background:var(--amber-bg);color:var(--amber-ink);margin-top:10px}
+
+/* ---------- Información ---------- */
+.info2{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,430px),1fr));gap:14px}
+.info-card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:22px}
+.info-card h3{margin:0 0 8px;font-size:17px;font-weight:600}
+.info-card p{margin:8px 0 0;font-size:14px;line-height:1.7;color:var(--ink-2)}
+.dato{display:flex;gap:14px;align-items:baseline;border-top:1px solid var(--line-3);padding:10px 0;font-size:14px;color:var(--ink-2);line-height:1.5}
+.dato b{font-family:var(--mono);font-weight:500;font-size:20px;color:var(--ink);flex:none;min-width:110px}
+.faq details{border-top:1px solid var(--line-2);padding:4px 0}
+.faq summary{color:var(--ink);font-size:15px}
+.faq p{margin:2px 0 12px;font-size:14px;line-height:1.7;color:var(--ink-2)}
+.buscar{min-height:44px;border:1px solid var(--control);border-radius:8px;padding:0 14px;font-size:15px;width:min(100%,380px);font-family:inherit}
+
+/* En pantallas táctiles el botón ? conserva su tamaño, pero se puede tocar en 44 x 44 px */
+@media (pointer:coarse){.q{position:relative}.q::after{content:'';position:absolute;inset:-13px;border-radius:50%}}
+@media (prefers-reduced-motion:reduce){
+  *{animation-duration:.01ms !important;animation-delay:0s !important;transition-duration:.01ms !important}
+  html{scroll-behavior:auto}
+}
+@media (max-width:900px){
+  .hero .in{grid-template-columns:1fr;padding:36px 16px 40px;gap:30px}
+  .calc{grid-template-columns:1fr}
+  .foot .grid3{grid-template-columns:1fr}
+}
+@media (max-width:640px){
+  .topnav .in{padding:10px 16px}
+  .links{order:3;width:100%;flex-wrap:nowrap;overflow-x:auto}
+  .nav-r{order:2}
+  .nav-r .pill{display:none}
+  .brand .tg{display:none}
+  .topnav .in{padding:6px 16px 0}
+  .lk{padding:0 12px}
+  .layout{padding:16px}
+  .band{padding:34px 16px}
+  .pagehead .in{padding:26px 16px 22px}
+  .dir{padding-left:0}
+  .frow{flex-wrap:wrap;gap:4px 12px;padding:6px 0}
+  .fname{width:100%}
+  .yaxis{width:44px}
+  .chart-row{padding-right:50px}
+  .kpi .v{font-size:22px}
+  .ebar,.ebar.eb2{grid-template-columns:1fr;gap:4px}
+  .op{display:none}
+  .scen{grid-template-columns:1fr}
+  .cmp .r{grid-template-columns:1fr;gap:4px}
+  .how>div{border-right:0;border-bottom:1px solid var(--line-2)}
+  .years{gap:2px}
+  .ylab span{font-size:8px}
+  .hread .big{font-size:28px}
+}
+</style>
+</head>
+<body>
+
+<div id="cargando" role="status" aria-live="polite" title="Toque para entrar">
+  <svg class="marca" viewBox="0 0 96 96" aria-hidden="true">
+    <circle class="m-sol" cx="66" cy="30" r="11" fill="#E8A317"></circle>
+    <line x1="10" y1="72" x2="86" y2="72" stroke="#fff" stroke-width="3" stroke-linecap="round"></line>
+    <polyline class="m-linea" points="10,60 28,46 44,53 66,26 86,20" fill="none" stroke="#8FB8EA" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"></polyline>
+  </svg>
+  <div class="nom">Horizonte</div>
+  <div class="lema">Los precios y las remesas de Honduras, proyectados y explicados</div>
+  <div class="barra"><i></i></div>
+  <div class="paso" id="paso-carga">Cargando datos del Banco Central de Honduras…</div>
+</div>
+
+<div id="app">
+  <header class="topnav">
+    <div class="wrap in">
+      <button type="button" class="brand" data-ir="inicio" aria-label="Horizonte, ir al inicio">
+        <svg width="38" height="38" viewBox="0 0 96 96" aria-hidden="true"><rect width="96" height="96" rx="20" fill="#0B2545"></rect><circle cx="66" cy="30" r="9" fill="#E8A317"></circle><line x1="14" y1="70" x2="82" y2="70" stroke="#fff" stroke-width="3.5" stroke-linecap="round"></line><polyline points="14,58 30,46 44,52 64,28 82,23" fill="none" stroke="#8FB8EA" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"></polyline></svg>
+        <span><div class="nm">Horizonte</div><div class="tg">Precios y remesas de Honduras</div></span>
+      </button>
+      <nav class="links" id="links" aria-label="Secciones principales"></nav>
+      <div class="nav-r">
+        <span class="pill" id="badge"></span>
+        <button type="button" class="tema" id="btn-tema" aria-label="Cambiar a modo oscuro" title="Modo oscuro / claro">
+          <svg class="luna" viewBox="0 0 24 24" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"></path></svg>
+          <svg class="sol" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4"></circle><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"></path></svg>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <div id="page-inicio" class="page"></div>
+
+  <section id="page-proy" class="page hidden">
+    <div class="pagehead"><div class="wrap in" style="display:flex;flex-wrap:wrap;gap:12px 24px;align-items:flex-end;justify-content:space-between">
+      <div>
+        <h1 class="sec-t">Proyección</h1>
+        <p class="sec-s">Elija qué quiere proyectar, para qué fecha y con qué modelo. Después vea de dónde sale el número y qué tan confiable es.</p>
+      </div>
+      <button type="button" class="btn suave" id="btn-guia">¿Cómo se usa?</button>
+    </div></div>
+    <div class="wrap layout">
+      <aside>
+        <div>
+          <div class="step">1 · ¿Qué quiere proyectar?</div>
+          <div style="display:flex;flex-direction:column;gap:8px" id="opt-serie"></div>
+        </div>
+        <div>
+          <div class="step">2 · ¿Para qué fecha? <button type="button" class="q" data-g="horizonte" aria-label="Ayuda: fecha">?</button></div>
+          <div class="hgrid" id="opt-h"></div>
+          <div class="note" id="note-h"></div>
+        </div>
+        <div>
+          <div class="step">3 · ¿Con qué modelo? <button type="button" class="q" data-g="modelos" aria-label="Ayuda: modelos">?</button></div>
+          <div style="display:flex;flex-direction:column;gap:8px" id="opt-modelo"></div>
+        </div>
+        <div style="border-top:1px solid var(--line-2);padding-top:18px;display:flex;flex-direction:column;gap:10px">
+          <button type="button" class="download" id="btn-csv">Descargar proyección (CSV)</button>
+          <div class="note" style="margin-top:0" id="note-fechas"></div>
+        </div>
+      </aside>
+
+      <main>
+        <section class="guide" id="guia">
+          <button type="button" class="close" id="guia-cerrar">Cerrar ✕</button>
+          <h3>¿Primera vez aquí? Así se usa</h3>
+          <ol>
+            <li>En el panel de opciones elija <b>qué quiere proyectar</b>: los precios (IPC) o las remesas.</li>
+            <li>Elija <b>para qué fecha</b> quiere saber el valor.</li>
+            <li>Elija el <b>modelo</b>. Son dos formas distintas de calcular el futuro; puede comparar ambas.</li>
+            <li>Lea las pestañas en orden: <b>1 · Proyección</b> dice cuánto se espera, <b>2 · ¿Por qué?</b> explica de dónde sale ese número y <b>3 · ¿Qué tan bueno es?</b> muestra cuánto se equivocó cada modelo en el pasado.</li>
+            <li>Pase el cursor (o toque) sobre cualquier cifra con subrayado punteado para ver qué significa. El símbolo <span class="q" style="cursor:default">?</span> explica las palabras técnicas.</li>
+          </ol>
+        </section>
+
+        <div class="tabs" role="tablist" aria-label="Secciones de la proyección" id="tabs"></div>
+
+        <section id="tab-proy" style="display:flex;flex-direction:column;gap:20px">
+          <div class="kpis" id="kpis"></div>
+          <div class="card">
+            <div style="display:flex;flex-wrap:wrap;justify-content:space-between;gap:8px 16px;align-items:baseline">
+              <h2 id="chart-title"></h2>
+              <label class="switch"><input type="checkbox" id="chk-comparar"> Comparar los dos modelos</label>
+            </div>
+            <div class="legend" id="legend" style="margin-top:8px"></div>
+            <div id="chart-root"></div>
+            <p class="chart-help" id="chart-help"></p>
+          </div>
+          <section class="callout" style="display:flex;gap:14px;align-items:flex-start">
+            <svg width="22" height="22" viewBox="0 0 24 24" aria-hidden="true" style="flex:none;margin-top:2px;fill:none;stroke:var(--accent);stroke-width:2;stroke-linecap:round"><circle cx="12" cy="12" r="9"></circle><line x1="12" y1="11" x2="12" y2="16"></line><line x1="12" y1="8" x2="12" y2="8"></line></svg>
+            <div>
+              <div style="font-size:14px;font-weight:600">En palabras sencillas</div>
+              <p style="margin:6px 0 0;font-size:14px;line-height:1.6" id="resumen"></p>
+              <p style="margin:8px 0 0;font-size:13px;line-height:1.6;color:var(--ink-2)" id="resumen2"></p>
+              <button type="button" class="btn azul" style="margin-top:14px;min-height:40px;font-size:14px" data-ir="rec">Ver qué hacer con esta proyección</button>
+            </div>
+          </section>
+          <div class="card hidden" id="verif"></div>
+        </section>
+
+        <section id="tab-exp" class="hidden" style="flex-direction:column;gap:20px">
+          <div class="card">
+            <div style="display:flex;flex-wrap:wrap;gap:8px 16px;align-items:center;justify-content:space-between">
+              <h2 id="exp-title"></h2>
+              <span class="tpill" id="exp-badge"></span>
+            </div>
+            <p class="lead" id="exp-sub"></p>
+            <div class="steps3">
+              <div class="s3"><b>1</b><span>El modelo empieza en un <strong>punto de partida</strong>.</span></div>
+              <div class="s3"><b>2</b><span>Cada barra <strong style="color:var(--warn-ink)">suma</strong> o <strong style="color:var(--accent-dark)">resta</strong> algo según un dato o una regla.</span></div>
+              <div class="s3"><b>3</b><span>Lo que queda al final es la <strong>proyección</strong>.</span></div>
+            </div>
+            <div class="boxes">
+              <div class="box" id="bx-base"><div class="k" id="exp-base-l"></div><div class="v" id="exp-base"></div><div class="e" id="exp-base-e"></div></div>
+              <div class="op" aria-hidden="true" id="op1">+</div>
+              <div class="box" id="bx-sum"><div class="k" id="exp-sum-l"></div><div class="v" id="exp-sum"></div><div class="e">Suma de todas las barras de abajo</div></div>
+              <div class="op" aria-hidden="true">=</div>
+              <div class="box hl" id="bx-pred"><div class="k" id="exp-pred-l"></div><div class="v" style="font-weight:500" id="exp-pred"></div><div class="e">El valor que muestra la pestaña Proyección</div></div>
+            </div>
+            <div class="dir"><span class="dn">← lo que baja la proyección</span><span class="up">lo que sube la proyección →</span></div>
+            <div style="display:flex;flex-direction:column;gap:4px;margin-top:6px" id="exp-rows"></div>
+          </div>
+          <section class="callout">
+            <div style="font-size:14px;font-weight:600">Lectura de la explicación</div>
+            <p style="margin:6px 0 0;font-size:14px;line-height:1.6" id="exp-texto"></p>
+          </section>
+        </section>
+
+        <section id="tab-des" class="hidden" style="flex-direction:column;gap:20px">
+          <div class="card">
+            <h2 id="ver-title"></h2>
+            <p class="lead">Para saber si un modelo es confiable, se le hizo un examen: se le dieron los datos hasta cierto mes, se le pidió adivinar el siguiente y se comparó con lo que realmente pasó. Se repitió más de cien veces, avanzando un mes cada vez. <button type="button" class="q" data-g="validacion" aria-label="Ayuda: cómo se evaluó">?</button></p>
+            <div class="verdict" style="margin-top:16px">
+              <p class="big" id="ver-big"></p>
+            </div>
+            <div style="margin-top:16px;display:flex;flex-direction:column;gap:6px" id="ver-bars"></div>
+            <p class="chart-help" id="ver-note"></p>
+          </div>
+
+          <div class="card">
+            <h2>¿La diferencia es real o pudo ser suerte? <button type="button" class="q" data-g="dm" aria-label="Ayuda: prueba de Diebold y Mariano">?</button></h2>
+            <p class="lead">Que un modelo se equivoque un poco menos no basta: podría ser casualidad. Una prueba estadística (Diebold y Mariano) dice si la ventaja de uno de los dos modelos es real.</p>
+            <div style="overflow-x:auto;margin-top:14px">
+              <table><thead><tr><th>Proyectando a</th><th>Resultado</th><th class="num">Estadístico <button type="button" class="q" data-g="estadistico" aria-label="Ayuda: estadístico">?</button></th><th class="num">Valor p <button type="button" class="q" data-g="valorp" aria-label="Ayuda: valor p">?</button></th></tr></thead><tbody id="dm-body"></tbody></table>
+            </div>
+          </div>
+
+          <div class="card">
+            <details>
+              <summary>Ver las cuatro medidas de error (detalle técnico)</summary>
+              <p class="lead" id="des-sub" style="font-size:13px"></p>
+              <div style="overflow-x:auto;margin-top:10px">
+                <table><thead><tr><th>Modelo</th>
+                  <th class="num">MAE <button type="button" class="q" data-g="mae" aria-label="Ayuda: MAE">?</button></th>
+                  <th class="num">RMSE <button type="button" class="q" data-g="rmse" aria-label="Ayuda: RMSE">?</button></th>
+                  <th class="num">MAPE (%) <button type="button" class="q" data-g="mape" aria-label="Ayuda: MAPE">?</button></th>
+                  <th class="num">MASE <button type="button" class="q" data-g="mase" aria-label="Ayuda: MASE">?</button></th></tr></thead><tbody id="des-body"></tbody></table>
+              </div>
+            </details>
+          </div>
+        </section>
+      </main>
+    </div>
+  </section>
+
+  <div id="page-rec" class="page hidden"></div>
+  <div id="page-calc" class="page hidden"></div>
+  <div id="page-info" class="page hidden"></div>
+
+  <footer class="foot" id="pie"></footer>
+</div>
+
+<div id="pop" role="dialog" aria-live="polite"></div>
+<div id="tt" role="tooltip"></div>
+<script>
+const DATOS = {"generado": "2026-10-26", "ilustrativo": false, "series": {"ipc": {"historia": {"fechas": ["2000-01", "2000-02", "2000-03", "2000-04", "2000-05", "2000-06", "2000-07", "2000-08", "2000-09", "2000-10", "2000-11", "2000-12", "2001-01", "2001-02", "2001-03", "2001-04", "2001-05", "2001-06", "2001-07", "2001-08", "2001-09", "2001-10", "2001-11", "2001-12", "2002-01", "2002-02", "2002-03", "2002-04", "2002-05", "2002-06", "2002-07", "2002-08", "2002-09", "2002-10", "2002-11", "2002-12", "2003-01", "2003-02", "2003-03", "2003-04", "2003-05", "2003-06", "2003-07", "2003-08", "2003-09", "2003-10", "2003-11", "2003-12", "2004-01", "2004-02", "2004-03", "2004-04", "2004-05", "2004-06", "2004-07", "2004-08", "2004-09", "2004-10", "2004-11", "2004-12", "2005-01", "2005-02", "2005-03", "2005-04", "2005-05", "2005-06", "2005-07", "2005-08", "2005-09", "2005-10", "2005-11", "2005-12", "2006-01", "2006-02", "2006-03", "2006-04", "2006-05", "2006-06", "2006-07", "2006-08", "2006-09", "2006-10", "2006-11", "2006-12", "2007-01", "2007-02", "2007-03", "2007-04", "2007-05", "2007-06", "2007-07", "2007-08", "2007-09", "2007-10", "2007-11", "2007-12", "2008-01", "2008-02", "2008-03", "2008-04", "2008-05", "2008-06", "2008-07", "2008-08", "2008-09", "2008-10", "2008-11", "2008-12", "2009-01", "2009-02", "2009-03", "2009-04", "2009-05", "2009-06", "2009-07", "2009-08", "2009-09", "2009-10", "2009-11", "2009-12", "2010-01", "2010-02", "2010-03", "2010-04", "2010-05", "2010-06", "2010-07", "2010-08", "2010-09", "2010-10", "2010-11", "2010-12", "2011-01", "2011-02", "2011-03", "2011-04", "2011-05", "2011-06", "2011-07", "2011-08", "2011-09", "2011-10", "2011-11", "2011-12", "2012-01", "2012-02", "2012-03", "2012-04", "2012-05", "2012-06", "2012-07", "2012-08", "2012-09", "2012-10", "2012-11", "2012-12", "2013-01", "2013-02", "2013-03", "2013-04", "2013-05", "2013-06", "2013-07", "2013-08", "2013-09", "2013-10", "2013-11", "2013-12", "2014-01", "2014-02", "2014-03", "2014-04", "2014-05", "2014-06", "2014-07", "2014-08", "2014-09", "2014-10", "2014-11", "2014-12", "2015-01", "2015-02", "2015-03", "2015-04", "2015-05", "2015-06", "2015-07", "2015-08", "2015-09", "2015-10", "2015-11", "2015-12", "2016-01", "2016-02", "2016-03", "2016-04", "2016-05", "2016-06", "2016-07", "2016-08", "2016-09", "2016-10", "2016-11", "2016-12", "2017-01", "2017-02", "2017-03", "2017-04", "2017-05", "2017-06", "2017-07", "2017-08", "2017-09", "2017-10", "2017-11", "2017-12", "2018-01", "2018-02", "2018-03", "2018-04", "2018-05", "2018-06", "2018-07", "2018-08", "2018-09", "2018-10", "2018-11", "2018-12", "2019-01", "2019-02", "2019-03", "2019-04", "2019-05", "2019-06", "2019-07", "2019-08", "2019-09", "2019-10", "2019-11", "2019-12", "2020-01", "2020-02", "2020-03", "2020-04", "2020-05", "2020-06", "2020-07", "2020-08", "2020-09", "2020-10", "2020-11", "2020-12", "2021-01", "2021-02", "2021-03", "2021-04", "2021-05", "2021-06", "2021-07", "2021-08", "2021-09", "2021-10", "2021-11", "2021-12", "2022-01", "2022-02", "2022-03", "2022-04", "2022-05", "2022-06", "2022-07", "2022-08", "2022-09", "2022-10", "2022-11", "2022-12", "2023-01", "2023-02", "2023-03", "2023-04", "2023-05", "2023-06", "2023-07", "2023-08", "2023-09", "2023-10", "2023-11", "2023-12", "2024-01", "2024-02", "2024-03", "2024-04", "2024-05", "2024-06", "2024-07", "2024-08", "2024-09", "2024-10", "2024-11", "2024-12", "2025-01", "2025-02", "2025-03", "2025-04", "2025-05", "2025-06", "2025-07", "2025-08", "2025-09", "2025-10", "2025-11", "2025-12"], "valores": [100.5, 102.0, 103.0, 104.3, 105.3, 106.3, 107.0, 107.5, 107.7, 108.3, 109.5, 110.1, 111.1, 112.5, 113.5, 114.2, 115.6, 116.3, 116.9, 117.7, 118.6, 118.8, 119.4, 119.8, 120.2, 121.5, 122.2, 123.1, 123.7, 125.1, 126.1, 126.9, 127.1, 127.8, 128.6, 129.5, 130.6, 132.3, 132.8, 133.5, 133.7, 134.1, 134.6, 135.8, 136.4, 137.0, 137.9, 138.3, 139.6, 141.2, 141.7, 143.2, 144.3, 145.2, 147.1, 147.6, 147.8, 149.1, 150.4, 151.0, 152.2, 154.0, 155.2, 156.6, 157.2, 158.3, 159.7, 161.0, 161.6, 161.7, 162.0, 162.7, 163.3, 164.4, 164.8, 165.7, 166.8, 167.3, 168.2, 168.8, 168.8, 169.0, 169.9, 171.3, 172.4, 173.9, 175.2, 176.2, 176.9, 177.6, 178.8, 180.1, 180.8, 183.0, 186.2, 186.5, 187.7, 189.7, 191.4, 193.3, 196.8, 199.2, 203.4, 205.3, 205.6, 206.9, 206.5, 206.7, 206.6, 208.2, 208.2, 208.9, 208.9, 210.0, 211.5, 211.7, 211.9, 212.4, 212.9, 212.8, 214.0, 215.5, 216.5, 217.6, 218.0, 218.9, 220.3, 221.3, 222.6, 224.7, 226.6, 226.6, 227.6, 229.2, 230.8, 233.4, 234.8, 235.8, 237.4, 238.3, 237.8, 238.0, 238.9, 239.3, 239.8, 242.1, 243.9, 246.6, 246.9, 246.9, 247.1, 248.6, 250.4, 251.5, 251.9, 252.2, 253.4, 256.1, 257.5, 258.1, 258.8, 259.9, 261.0, 262.0, 262.8, 263.1, 263.8, 264.6, 268.6, 270.8, 272.4, 273.5, 274.9, 276.1, 278.2, 278.6, 278.9, 279.7, 280.7, 280.0, 278.9, 280.7, 282.6, 283.3, 284.5, 286.1, 287.1, 287.2, 286.6, 286.8, 286.6, 286.6, 287.5, 288.9, 289.6, 290.2, 291.2, 293.1, 294.0, 294.4, 294.9, 294.9, 295.3, 296.1, 297.4, 300.0, 301.0, 302.1, 303.0, 303.8, 304.7, 305.7, 305.7, 306.6, 308.1, 310.1, 311.0, 313.0, 314.1, 314.8, 315.1, 316.4, 317.6, 319.0, 319.1, 320.9, 322.6, 323.2, 323.3, 325.8, 327.1, 330.1, 331.3, 331.6, 332.5, 332.7, 333.2, 334.0, 335.0, 336.4, 337.2, 338.8, 339.8, 341.1, 338.9, 340.4, 342.8, 343.4, 344.5, 346.2, 347.8, 349.9, 351.3, 351.9, 353.2, 354.6, 355.3, 356.3, 357.4, 358.8, 360.4, 362.3, 365.0, 368.5, 373.0, 374.3, 377.8, 384.2, 387.6, 392.7, 396.2, 396.1, 396.6, 399.2, 403.1, 404.6, 406.3, 411.0, 412.0, 412.8, 413.1, 414.7, 416.6, 418.7, 420.9, 422.5, 423.4, 425.6, 426.6, 429.5, 431.6, 432.8, 433.5, 434.9, 437.7, 439.6, 439.8, 439.6, 440.1, 442.1, 444.8, 449.9, 451.0, 451.8, 453.2, 455.2, 457.0, 457.9, 459.8, 460.9, 462.5, 464.1]}, "fechas_proyeccion": ["2026-01", "2026-02", "2026-03", "2026-04", "2026-05", "2026-06", "2026-07", "2026-08", "2026-09", "2026-10", "2026-11", "2026-12"], "proyecciones": {"sarima": [{"valor": 465.6366132264584, "inferior": 463.9969574047338, "superior": 467.276269048183}, {"valor": 467.8150970290704, "inferior": 464.9534426415949, "superior": 470.67675141654587}, {"valor": 469.19727493387205, "inferior": 465.29769773193453, "superior": 473.09685213580957}, {"valor": 470.7084334524994, "inferior": 465.91947805025393, "superior": 475.4973888547448}, {"valor": 471.68340386425007, "inferior": 466.1176608286432, "superior": 477.24914689985695}, {"valor": 473.15227565815906, "inferior": 466.89457151470293, "superior": 479.4099798016152}, {"valor": 474.74546436786557, "inferior": 467.8607008614854, "superior": 481.63022787424575}, {"valor": 475.79096156648205, "inferior": 468.3299392110989, "superior": 483.2519839218652}, {"valor": 476.7105262169566, "inferior": 468.7139742043739, "superior": 484.7070782295393}, {"valor": 477.82696583659555, "inferior": 469.32828331866017, "superior": 486.3256483545309}, {"valor": 479.1436699985287, "inferior": 470.17080012623916, "superior": 488.11653987081826}, {"valor": 480.46857750535077, "inferior": 471.04530882079865, "superior": 489.8918461899029}], "xgb": [{"valor": 462.5609130859375, "inferior": 462.82347897741397, "superior": 468.6009313274855}, {"valor": 463.48553466796875, "inferior": 463.9232523382876, "superior": 473.7317457555272}, {"valor": 462.8958435058594, "inferior": 463.50740902311793, "superior": 477.3178015488421}, {"valor": 462.6152648925781, "inferior": 465.01254550933476, "superior": 481.7537734239573}, {"valor": 463.0050964355469, "inferior": 467.19198803789783, "superior": 486.88900643262946}, {"valor": 463.5643005371094, "inferior": 469.54599881731946, "superior": 492.21204274427777}, {"valor": 463.5434875488281, "inferior": 470.63370387800785, "superior": 495.5618534683397}, {"valor": 463.1210021972656, "inferior": 471.31253235983684, "superior": 498.47902244832335}, {"valor": 463.2655944824219, "inferior": 472.5678040443278, "superior": 502.00454243875606}, {"valor": 462.1291198730469, "inferior": 472.51391290099224, "superior": 504.1346556889946}, {"valor": 463.3940734863281, "inferior": 474.91572129783566, "superior": 508.88541117080104}, {"valor": 463.48016357421875, "inferior": 476.11258703980604, "superior": 512.351402011388}]}, "explicacion": {"sarima": {"metodo": "ecuacion", "base": 464.1, "base_etiqueta": "Punto de partida (IPC dic 2025)", "fecha": "ene 2026", "terminos": [{"nombre": "Constante de la ecuación", "descripcion": "Deriva: crecimiento de fondo", "valor": 0.018463265117362525}, {"nombre": "Ajuste por tendencia reciente", "descripcion": "Términos autorregresivos (φ)", "valor": 0.688660778688399}, {"nombre": "Ajuste estacional", "descripcion": "Autorregresivo estacional (Φ)", "valor": 1.7891582906240702}, {"nombre": "Corrección por error estacional", "descripcion": "Media móvil estacional (Θ)", "valor": -0.9599168063570477}], "proyeccion": 465.6363655280728, "estacional": null}, "xgb": {"metodo": "shap", "base": 263.68109130859375, "base_etiqueta": "Valor base (promedio del modelo)", "fecha": "ene 2026", "terminos": [{"nombre": "Valor del último mes", "descripcion": "IPC de dic 2025", "valor": 137.82533264160156}, {"nombre": "Valor de hace 2 meses", "descripcion": "IPC de nov 2025", "valor": 42.47471237182617}, {"nombre": "Valor de hace 6 meses", "descripcion": "IPC de jul 2025", "valor": 9.414657592773438}, {"nombre": "Valor de hace 3 meses", "descripcion": "IPC de oct 2025", "valor": 7.064354419708252}, {"nombre": "Valor de hace 12 meses", "descripcion": "IPC de ene 2025", "valor": 1.7458456754684448}, {"nombre": "Cambio respecto al año anterior", "descripcion": "dic 2025 frente a dic 2024", "valor": 0.24458232522010803}, {"nombre": "Otras variables", "descripcion": "5 variables de menor peso", "valor": 0.1101030888967216}], "proyeccion": 462.56067942408845}}, "especificacion_arima": "SARIMA(1,1,0)(1,0,1)[12] con deriva", "logaritmo": false, "variacion_xgb": false, "desempeno": {"1": {"ingenuo": {"MAE": 16.696, "RMSE": 18.42, "MAPE": 4.4947, "MASE": 1.385}, "sarima": {"MAE": 0.7607, "RMSE": 1.0693, "MAPE": 0.2073, "MASE": 0.0631}, "xgb": {"MAE": 1.9815, "RMSE": 2.3236, "MAPE": 0.5364, "MASE": 0.1644}}, "3": {"ingenuo": {"MAE": 16.835, "RMSE": 18.5399, "MAPE": 4.5216, "MASE": 1.3965}, "sarima": {"MAE": 1.794, "RMSE": 2.5496, "MAPE": 0.4843, "MASE": 0.1488}, "xgb": {"MAE": 4.9129, "RMSE": 5.6286, "MAPE": 1.3246, "MASE": 0.4075}}, "6": {"ingenuo": {"MAE": 17.0925, "RMSE": 18.7416, "MAPE": 4.5777, "MASE": 1.4179}, "sarima": {"MAE": 2.8395, "RMSE": 4.4297, "MAPE": 0.7577, "MASE": 0.2355}, "xgb": {"MAE": 9.3972, "RMSE": 10.4115, "MAPE": 2.5247, "MASE": 0.7795}}, "12": {"ingenuo": {"MAE": 17.6026, "RMSE": 19.1527, "MAPE": 4.6843, "MASE": 1.4602}, "sarima": {"MAE": 5.1304, "RMSE": 8.2918, "MAPE": 1.3229, "MASE": 0.4256}, "xgb": {"MAE": 18.0289, "RMSE": 19.5928, "MAPE": 4.7974, "MASE": 1.4956}}}, "diebold_mariano": [{"horizonte": "1 mes", "estadistico": -8.447, "valor_p": 0.0, "favorecido": "sarima"}, {"horizonte": "3 meses", "estadistico": -5.4322, "valor_p": 0.0, "favorecido": "sarima"}, {"horizonte": "6 meses", "estadistico": -4.4785, "valor_p": 0.0, "favorecido": "sarima"}, {"horizonte": "12 meses", "estadistico": -3.4162, "valor_p": 0.0009, "favorecido": "sarima"}], "sobreajuste": {"MAE en entrenamiento": 0.1963, "MAE fuera de muestra": 1.9815, "Razón entrenamiento/fuera": 0.099}, "verificacion": null}, "rem": {"historia": {"fechas": ["2000-01", "2000-02", "2000-03", "2000-04", "2000-05", "2000-06", "2000-07", "2000-08", "2000-09", "2000-10", "2000-11", "2000-12", "2001-01", "2001-02", "2001-03", "2001-04", "2001-05", "2001-06", "2001-07", "2001-08", "2001-09", "2001-10", "2001-11", "2001-12", "2002-01", "2002-02", "2002-03", "2002-04", "2002-05", "2002-06", "2002-07", "2002-08", "2002-09", "2002-10", "2002-11", "2002-12", "2003-01", "2003-02", "2003-03", "2003-04", "2003-05", "2003-06", "2003-07", "2003-08", "2003-09", "2003-10", "2003-11", "2003-12", "2004-01", "2004-02", "2004-03", "2004-04", "2004-05", "2004-06", "2004-07", "2004-08", "2004-09", "2004-10", "2004-11", "2004-12", "2005-01", "2005-02", "2005-03", "2005-04", "2005-05", "2005-06", "2005-07", "2005-08", "2005-09", "2005-10", "2005-11", "2005-12", "2006-01", "2006-02", "2006-03", "2006-04", "2006-05", "2006-06", "2006-07", "2006-08", "2006-09", "2006-10", "2006-11", "2006-12", "2007-01", "2007-02", "2007-03", "2007-04", "2007-05", "2007-06", "2007-07", "2007-08", "2007-09", "2007-10", "2007-11", "2007-12", "2008-01", "2008-02", "2008-03", "2008-04", "2008-05", "2008-06", "2008-07", "2008-08", "2008-09", "2008-10", "2008-11", "2008-12", "2009-01", "2009-02", "2009-03", "2009-04", "2009-05", "2009-06", "2009-07", "2009-08", "2009-09", "2009-10", "2009-11", "2009-12", "2010-01", "2010-02", "2010-03", "2010-04", "2010-05", "2010-06", "2010-07", "2010-08", "2010-09", "2010-10", "2010-11", "2010-12", "2011-01", "2011-02", "2011-03", "2011-04", "2011-05", "2011-06", "2011-07", "2011-08", "2011-09", "2011-10", "2011-11", "2011-12", "2012-01", "2012-02", "2012-03", "2012-04", "2012-05", "2012-06", "2012-07", "2012-08", "2012-09", "2012-10", "2012-11", "2012-12", "2013-01", "2013-02", "2013-03", "2013-04", "2013-05", "2013-06", "2013-07", "2013-08", "2013-09", "2013-10", "2013-11", "2013-12", "2014-01", "2014-02", "2014-03", "2014-04", "2014-05", "2014-06", "2014-07", "2014-08", "2014-09", "2014-10", "2014-11", "2014-12", "2015-01", "2015-02", "2015-03", "2015-04", "2015-05", "2015-06", "2015-07", "2015-08", "2015-09", "2015-10", "2015-11", "2015-12", "2016-01", "2016-02", "2016-03", "2016-04", "2016-05", "2016-06", "2016-07", "2016-08", "2016-09", "2016-10", "2016-11", "2016-12", "2017-01", "2017-02", "2017-03", "2017-04", "2017-05", "2017-06", "2017-07", "2017-08", "2017-09", "2017-10", "2017-11", "2017-12", "2018-01", "2018-02", "2018-03", "2018-04", "2018-05", "2018-06", "2018-07", "2018-08", "2018-09", "2018-10", "2018-11", "2018-12", "2019-01", "2019-02", "2019-03", "2019-04", "2019-05", "2019-06", "2019-07", "2019-08", "2019-09", "2019-10", "2019-11", "2019-12", "2020-01", "2020-02", "2020-03", "2020-04", "2020-05", "2020-06", "2020-07", "2020-08", "2020-09", "2020-10", "2020-11", "2020-12", "2021-01", "2021-02", "2021-03", "2021-04", "2021-05", "2021-06", "2021-07", "2021-08", "2021-09", "2021-10", "2021-11", "2021-12", "2022-01", "2022-02", "2022-03", "2022-04", "2022-05", "2022-06", "2022-07", "2022-08", "2022-09", "2022-10", "2022-11", "2022-12", "2023-01", "2023-02", "2023-03", "2023-04", "2023-05", "2023-06", "2023-07", "2023-08", "2023-09", "2023-10", "2023-11", "2023-12", "2024-01", "2024-02", "2024-03", "2024-04", "2024-05", "2024-06", "2024-07", "2024-08", "2024-09", "2024-10", "2024-11", "2024-12", "2025-01", "2025-02", "2025-03", "2025-04", "2025-05", "2025-06", "2025-07", "2025-08", "2025-09", "2025-10", "2025-11", "2025-12"], "valores": [23.1659, 29.676299999999998, 33.541199999999996, 29.1165, 40.6978, 29.859299999999998, 31.727700000000002, 34.3647, 33.0503, 36.093199999999996, 37.005900000000004, 46.0809, 43.2895, 40.929700000000004, 42.5825, 45.8808, 45.3249, 39.8821, 46.366699999999994, 46.338, 43.257400000000004, 55.9531, 46.8667, 54.2879, 51.3029, 48.727399999999996, 51.09139999999999, 70.1186, 65.3427, 54.8922, 64.694, 62.3505, 58.3495, 63.649899999999995, 57.9865, 69.0137, 56.382, 60.3407, 64.9909, 69.32910000000001, 71.6588, 70.31439999999999, 75.80510000000001, 77.8426, 85.552, 86.61019999999999, 76.655, 85.808, 66.8265, 88.3347, 92.0369, 85.7435, 93.1911, 102.07889999999999, 101.56280000000001, 120.2025, 114.02590000000001, 102.2095, 115.36919999999999, 127.0402, 129.7294, 124.52980000000001, 150.6854, 150.50029999999998, 165.16039999999998, 149.3642, 157.6335, 186.5693, 179.267, 168.6305, 185.86829999999998, 205.6135, 169.8546, 181.83589999999998, 217.243, 181.7979, 226.5118, 213.4146, 218.5298, 226.4411, 199.53810000000001, 218.0635, 212.7331, 223.6415, 200.7524, 202.2385, 224.6214, 216.642, 257.601, 228.05929999999998, 241.0793, 258.5092, 230.5323, 248.9229, 226.57739999999998, 241.3562, 212.4948, 230.13670491, 230.02969976000009, 249.43399599000008, 255.19289999999998, 251.60979999999998, 259.58546150000006, 258.2579724600001, 248.3716081800001, 252.71918532, 230.75936508000007, 261.9696385900001, 201.28146228, 233.1287720100001, 243.95038889000008, 220.57017323000002, 225.2970972800001, 233.98049106000008, 227.62016907000006, 220.39935873000007, 217.43556828000007, 215.57733202000009, 208.45219269000006, 236.77460942000005, 167.44335524000005, 210.30887074, 264.9012701000001, 239.48679903000007, 247.99619378000003, 248.14868777000007, 240.3894064700001, 242.60893783000006, 232.62139104000008, 237.53074722000008, 244.73856606000004, 277.79705621000005, 190.95236082000005, 228.29027316000003, 276.17247903000003, 248.46194100000005, 281.7987142300001, 262.13431126000006, 251.66209070000008, 266.0839142200001, 242.9671544900001, 240.05992509000004, 235.13948373000002, 247.01860763000005, 203.41764786000007, 244.82964901, 278.32671213000003, 257.4708239200001, 279.5972272000001, 248.91146421000008, 262.94252493000005, 267.15553373, 243.68097338000004, 265.9147057100001, 265.27410789000004, 272.98535799000007, 240.65941990000002, 243.3908988000001, 258.88282129000004, 312.75858430000005, 308.16350922000004, 264.49390095, 303.25285424000003, 282.9017601200001, 275.57551713000004, 289.71825362000004, 255.55149705, 295.97490999000007, 252.46353730000007, 244.02066897000003, 300.8021340700001, 338.4912159800001, 329.50889989000007, 308.15056503, 310.1725598400001, 300.34777652000014, 326.1039692700001, 328.2405718800001, 317.93879762000006, 358.0075598700002, 276.3801563600001, 290.7247584700001, 352.5798734900001, 329.4448124000001, 344.0561277100001, 351.75108629000005, 345.61153011000005, 346.50509964, 342.3581966900001, 336.48412845, 327.4933717600001, 371.6970708700001, 284.12307059000005, 330.78115169000006, 358.6363450200002, 345.55286217000014, 381.8283998800002, 356.84194545, 341.04837328000013, 381.24027415000006, 348.17987397000013, 342.8170655000001, 364.26046111000016, 398.3747593900001, 324.712, 357.3377, 423.3147, 366.7267, 456.4889, 398.0384, 397.924, 431.6757, 378.0143, 420.39070000000004, 391.2886, 400.001, 368.0496, 373.9975, 411.2426, 450.6938, 485.6868, 427.6436, 451.4923, 464.90340000000003, 417.754, 469.43609999999995, 430.0402, 459.5618, 411.3365, 404.6946, 458.07079999999996, 486.16470000000004, 516.0843, 459.4998, 546.7722, 513.434, 512.7797, 526.2189000000001, 488.96709999999996, 537.8513, 443.9016, 455.21770000000004, 391.9037, 356.0621, 442.7004, 523.5369000000001, 547.718, 550.5355, 569.0709, 578.8256, 563.3004, 629.755, 494.645, 507.2993, 674.4346999999999, 634.9366, 702.1558, 656.3139, 648.5586, 689.8971, 662.8756, 656.1805, 699.6409, 745.6766, 612.922, 640.3845, 774.7984, 724.2518, 859.2781, 786.2261, 747.731, 868.6055, 770.9631999999999, 757.7147, 767.5315, 798.9259000000001, 709.0165999999999, 689.7916, 817.8124, 717.25, 939.5794000000001, 822.8221, 824.3271, 836.1261999999999, 766.3093, 793.4639, 760.1849, 815.0498, 694.1534, 728.0369000000001, 764.1617, 916.4514, 913.3921, 785.8050999999999, 923.2006, 863.0288, 865.33, 885.239, 844.6608, 927.0485, 805.3670999999999, 878.9345999999999, 1035.7217, 1013.7632, 1090.2703999999999, 1158.7675, 1157.0865, 1052.5924, 1166.6128, 1084.0111000000002, 993.5295, 1142.3503999999998]}, "fechas_proyeccion": ["2026-01", "2026-02", "2026-03", "2026-04", "2026-05", "2026-06", "2026-07", "2026-08", "2026-09", "2026-10", "2026-11", "2026-12"], "proyecciones": {"sarima": [{"valor": 960.7829338366923, "inferior": 831.1021223932145, "superior": 1110.6984582035507}, {"valor": 996.0266221343724, "inferior": 850.141398296292, "superior": 1166.94591510135}, {"valor": 1133.61816742702, "inferior": 958.8352079176212, "superior": 1340.2617456147939}, {"valor": 1120.8161686775238, "inferior": 926.60530432636, "superior": 1355.7324549121147}, {"valor": 1229.6086152380892, "inferior": 1002.631160804516, "superior": 1507.969636066912}, {"valor": 1163.1622466010601, "inferior": 937.6143299407719, "superior": 1442.9668667750518}, {"valor": 1202.867903089001, "inferior": 956.4002604791779, "superior": 1512.8511064570448}, {"valor": 1217.7655071968568, "inferior": 956.7727410143838, "superior": 1549.9530525359353}, {"valor": 1182.4334168627927, "inferior": 918.9177343804762, "superior": 1521.5168159274176}, {"valor": 1203.2098922828723, "inferior": 924.7837259568018, "superior": 1565.4622851299896}, {"valor": 1166.7314000801687, "inferior": 887.4297488590188, "superior": 1533.9379389559847}, {"valor": 1272.8289847019425, "inferior": 958.5502563593125, "superior": 1690.1499045555372}], "xgb": [{"valor": 981.7321055391951, "inferior": 917.9339937979393, "superior": 1240.900320545505}, {"valor": 1008.3056150926042, "inferior": 942.6250991464018, "superior": 1358.2530156550151}, {"valor": 1055.5822423245302, "inferior": 986.6593411832863, "superior": 1509.6291815838283}, {"valor": 1061.6249656624682, "inferior": 999.901606035658, "superior": 1559.0631506327477}, {"valor": 1093.1670121522175, "inferior": 1037.4295058917482, "superior": 1647.3886451227254}, {"valor": 1077.5243261138662, "inferior": 1030.2922222713185, "superior": 1665.2182731916832}, {"valor": 1104.5803246198243, "inferior": 1053.573812696884, "superior": 1708.3310002403994}, {"valor": 1043.0067816080052, "inferior": 992.399419818088, "superior": 1614.3296890027036}, {"valor": 1103.9853083537457, "inferior": 1047.8321855672339, "superior": 1710.0095166600534}, {"valor": 1051.0443400332035, "inferior": 995.1210239431871, "superior": 1629.2440824345424}, {"valor": 1000.9117471245787, "inferior": 945.3103506893423, "superior": 1552.7106483882296}, {"valor": 1094.0649950606578, "inferior": 1030.7250694000022, "superior": 1698.5066380633086}]}, "explicacion": {"sarima": {"metodo": "ecuacion", "base": 1142.3504, "base_etiqueta": "Punto de partida (Remesas dic 2025)", "fecha": "ene 2026", "terminos": [{"nombre": "Constante de la ecuación", "descripcion": "Deriva: crecimiento de fondo", "valor": 0.15399430967795524}, {"nombre": "Ajuste por tendencia reciente", "descripcion": "Términos autorregresivos (φ)", "valor": -50.55907699482282}, {"nombre": "Ajuste estacional", "descripcion": "Autorregresivo estacional (Φ)", "valor": -109.49810135866994}, {"nombre": "Corrección por errores pasados", "descripcion": "Media móvil reciente y estacional (θ, Θ)", "valor": -21.664282119492896}], "proyeccion": 960.7829338366923, "estacional": null}, "xgb": {"metodo": "shap", "base": 280.85013439555445, "base_etiqueta": "Valor base (promedio del modelo)", "fecha": "ene 2026", "terminos": [{"nombre": "Valor de hace 12 meses", "descripcion": "Remesas de ene 2025", "valor": 143.2486182501819}, {"nombre": "Promedio de los últimos 12 meses", "descripcion": "Media móvil ene–dic", "valor": 147.218779667857}, {"nombre": "Valor del último mes", "descripcion": "Remesas de dic 2025", "valor": 107.75211830149863}, {"nombre": "Promedio de los últimos 3 meses", "descripcion": "Media móvil oct–dic", "valor": 118.0908603496573}, {"nombre": "Valor de hace 2 meses", "descripcion": "Remesas de nov 2025", "valor": 104.73335426146468}, {"nombre": "Valor de hace 3 meses", "descripcion": "Remesas de oct 2025", "valor": 88.6090830060349}, {"nombre": "Otras variables", "descripcion": "5 variables de menor peso", "valor": -8.773905624337203}], "proyeccion": 981.7290426079117}}, "especificacion_arima": "SARIMA(2,1,0)(1,0,1)[12] con deriva", "logaritmo": true, "variacion_xgb": false, "desempeno": {"1": {"ingenuo": {"MAE": 76.7744, "RMSE": 103.8461, "MAPE": 11.5698, "MASE": 3.0717}, "sarima": {"MAE": 31.5972, "RMSE": 44.9064, "MAPE": 5.1436, "MASE": 1.2642}, "xgb": {"MAE": 47.4757, "RMSE": 67.352, "MAPE": 7.3505, "MASE": 1.8995}}, "3": {"ingenuo": {"MAE": 77.5153, "RMSE": 104.5939, "MAPE": 11.611, "MASE": 3.1014}, "sarima": {"MAE": 36.9232, "RMSE": 52.368, "MAPE": 6.0401, "MASE": 1.4773}, "xgb": {"MAE": 64.979, "RMSE": 90.0978, "MAPE": 9.88, "MASE": 2.5998}}, "6": {"ingenuo": {"MAE": 79.1908, "RMSE": 105.8796, "MAPE": 11.8258, "MASE": 3.1684}, "sarima": {"MAE": 45.2442, "RMSE": 64.7549, "MAPE": 7.2209, "MASE": 1.8102}, "xgb": {"MAE": 83.7698, "RMSE": 115.6779, "MAPE": 12.5092, "MASE": 3.3516}}, "12": {"ingenuo": {"MAE": 82.369, "RMSE": 108.4923, "MAPE": 12.1631, "MASE": 3.2956}, "sarima": {"MAE": 51.3715, "RMSE": 76.7689, "MAPE": 7.5831, "MASE": 2.0554}, "xgb": {"MAE": 99.5528, "RMSE": 130.9131, "MAPE": 14.2885, "MASE": 3.9831}}}, "diebold_mariano": [{"horizonte": "1 mes", "estadistico": -3.7657, "valor_p": 0.0003, "favorecido": "sarima"}, {"horizonte": "3 meses", "estadistico": -2.3701, "valor_p": 0.0194, "favorecido": "sarima"}, {"horizonte": "6 meses", "estadistico": -1.8047, "valor_p": 0.0737, "favorecido": "ninguno"}, {"horizonte": "12 meses", "estadistico": -1.7287, "valor_p": 0.0866, "favorecido": "ninguno"}], "sobreajuste": {"MAE en entrenamiento": 7.5295, "MAE fuera de muestra": 47.4757, "Razón entrenamiento/fuera": 0.1586}, "verificacion": {"filas": [{"mes": "2026-01", "real": 893.6803000000001, "sarima": 960.7829338366923, "inferior": 831.1021223932145, "superior": 1110.6984582035507, "xgb": 981.7321055391951}, {"mes": "2026-02", "real": 964.6055, "sarima": 996.0266221343724, "inferior": 850.141398296292, "superior": 1166.94591510135, "xgb": 1008.3056150926042}, {"mes": "2026-03", "real": 1249.9633999999999, "sarima": 1133.61816742702, "inferior": 958.8352079176212, "superior": 1340.2617456147939, "xgb": 1055.5822423245302}, {"mes": "2026-04", "real": 1130.1841000000002, "sarima": 1120.8161686775238, "inferior": 926.60530432636, "superior": 1355.7324549121147, "xgb": 1061.6249656624682}, {"mes": "2026-05", "real": 1194.6135, "sarima": 1229.6086152380892, "inferior": 1002.631160804516, "superior": 1507.969636066912, "xgb": 1093.1670121522175}, {"mes": "2026-06", "real": 1262.9443, "sarima": 1163.1622466010601, "inferior": 937.6143299407719, "superior": 1442.9668667750518, "xgb": 1077.5243261138662}, {"mes": "2026-07", "real": 1218.5313, "sarima": 1202.867903089001, "inferior": 956.4002604791779, "superior": 1512.8511064570448, "xgb": 1104.5803246198243}, {"mes": "2026-08", "real": 1265.3981, "sarima": 1217.7655071968568, "inferior": 956.7727410143838, "superior": 1549.9530525359353, "xgb": 1043.0067816080052}], "error_sarima": 4.597822919524001, "error_xgb": 10.762511025776837, "dentro": 8}}}};
+
+const APP = 'Horizonte';
+const MES = ['ene','feb','mar','abr','may','jun','jul','ago','sep','oct','nov','dic'];
+const MES_LARGO = ['enero','febrero','marzo','abril','mayo','junio','julio','agosto','septiembre','octubre','noviembre','diciembre'];
+// Colores de los datos; cambian con el tema (claro / oscuro)
+let TEMA = 'claro';
+let ACCENT = '#1F5FAE', ML = '#B4500C', NAIVE = '#8A93A0', GOOD = '#1E9E6A', BAD = '#D9480F';
+function colores(){
+  const o = TEMA === 'oscuro';
+  ACCENT = o ? '#5AA2F0' : '#1F5FAE'; ML = o ? '#F0883E' : '#B4500C'; NAIVE = o ? '#8896AA' : '#8A93A0';
+  GOOD = o ? '#3CC68A' : '#1E9E6A'; BAD = o ? '#FF7A45' : '#D9480F';
+  if (typeof MODELOS !== 'undefined'){ MODELOS.sarima.color = ACCENT; MODELOS.xgb.color = ML; }
+}
+const HISTORIA = 36;
+const SERIES = {
+  ipc: {label:'Precios (IPC)', largo:'Índice de precios al consumidor', sub:'Mide cuánto cuestan las cosas. Si sube, la vida está más cara.', corto:'IPC', unidad:'Puntos del índice', dec:1, decEje:0, bueno:false},
+  rem: {label:'Remesas familiares', largo:'Remesas familiares', sub:'Dinero que los hondureños en el exterior envían a sus familias, en millones de dólares.', corto:'Remesas', unidad:'Millones de dólares en el mes', dec:1, decEje:0, bueno:true}
+};
+// Los dos modelos, con nombres que se entienden. El nombre técnico queda como aclaración.
+const MODELOS = {
+  sarima: {label:'Modelo estadístico', tec:'SARIMA', el:'el modelo estadístico', de:'del modelo estadístico', El:'El modelo estadístico', color:ACCENT,
+    sub:'SARIMA: fórmula clásica que sigue la tendencia y el patrón que se repite cada año.'},
+  xgb: {label:'Inteligencia artificial', tec:'XGBoost', el:'la inteligencia artificial', de:'de la inteligencia artificial', El:'La inteligencia artificial', color:ML,
+    sub:'Machine learning (XGBoost): aprende patrones de miles de ejemplos del pasado.'}
+};
+const PAGINAS = [['inicio','Inicio'],['proy','Proyección'],['rec','Recomendaciones'],['calc','Calculadora de inflación'],['info','Información']];
+const TABS = [['proy','Proyección'],['exp','¿Por qué este valor?'],['des','¿Qué tan bueno es?']];
+const st = {pagina:'inicio', serie:'ipc', h:1, modelo:'sarima', tab:'proy', comparar:false, perfil:'hogar', hs:'ipc', hh:12, hz:12};
+
+// Glosario: la misma definición sirve para los íconos de ayuda y para la sección Información.
+const GLOSARIO = {
+  ipc: ['Índice de precios al consumidor (IPC)', 'Un número que resume cuánto cuesta una canasta de productos y servicios que compran los hogares. Se fijó en 100 en diciembre de 1999. Si hoy vale 464, las mismas cosas cuestan unas 4.6 veces lo que costaban entonces.', 'Cuando el IPC sube de un año a otro, a ese aumento se le llama inflación.'],
+  inflacion: ['Inflación', 'El aumento general de los precios con el tiempo. Se mide comparando el IPC de hoy con el de hace un año: si pasó de 100 a 105, la inflación del año fue 5 %.', 'Con inflación, el mismo dinero compra menos cosas.'],
+  poder: ['Poder adquisitivo (poder de compra)', 'Cuántas cosas se pueden comprar con una cantidad de dinero. Cuando los precios suben, el mismo dinero compra menos: pierde poder adquisitivo.', 'La calculadora de inflación muestra cuánto cambia entre dos fechas.'],
+  meta: ['Rango meta de inflación', 'El Banco Central de Honduras busca que la inflación ande alrededor de 4 % al año, con un margen de un punto hacia arriba o hacia abajo (de 3 % a 5 %).', 'Según el BCH, el esquema de metas de inflación se aplicará de forma gradual.'],
+  remesas: ['Remesas familiares', 'Dinero que las personas que viven fuera de Honduras, sobre todo en Estados Unidos, envían a sus familias. Se mide en millones de dólares por mes.', 'Aquí se usan los ingresos por transferencias corrientes de la balanza cambiaria del BCH, que incluyen las remesas.'],
+  transferencias: ['Transferencias corrientes', 'Cuenta de la balanza cambiaria del BCH que incluye las remesas familiares y otros envíos. Es la serie mensual más larga disponible, por eso se usa en esta herramienta.', 'Resulta entre 3 % y 6.6 % mayor que las remesas por departamento publicadas.'],
+  proyeccion: ['Proyección', 'El valor que el modelo calcula para un mes que todavía no ha pasado. No es una certeza: es la mejor estimación con la información disponible hoy.', ''],
+  horizonte: ['¿Para qué fecha? (horizonte)', 'Cuántos meses hacia adelante se quiere mirar desde el último dato publicado. Mientras más lejos, más difícil acertar, igual que el pronóstico del clima: es más fácil decir cómo estará mañana que dentro de un año.', ''],
+  modelos: ['Los dos modelos', 'El modelo estadístico (SARIMA) es una fórmula clásica que usan los bancos centrales: toma la tendencia de la serie y el patrón que se repite cada año. La inteligencia artificial (machine learning, en concreto XGBoost) aprende de ejemplos del pasado sin que nadie le diga la fórmula.', 'Esta herramienta permite comparar los dos y ver cuál acierta más.'],
+  sarima: ['Modelo estadístico (SARIMA)', 'Calcula el próximo valor a partir de los valores recientes, del crecimiento normal de la serie y de lo que suele pasar en cada mes del año.', 'Como es una fórmula conocida, se puede ver exactamente cuánto aporta cada parte.'],
+  xgboost: ['Inteligencia artificial (machine learning · XGBoost)', 'Combina cientos de árboles de decisión, preguntas del tipo “¿el valor del mes pasado fue mayor que tanto?”. Aprende de los datos del pasado.', 'Su limitación: no puede proyectar valores más altos que los que vio al aprender.'],
+  intervalo: ['Rango probable (intervalo del 95 %)', 'El rango donde casi seguro caerá el valor real. Si se hicieran 100 proyecciones así, en unas 95 el valor real quedaría dentro de la franja. Mientras más ancha la franja, más incertidumbre.', 'En la inteligencia artificial el rango se calcula con los errores que cometió en el examen.'],
+  validacion: ['¿Cómo se evaluó? (validación de origen móvil)', 'Como un examen con preguntas que el modelo nunca vio: se le dan los datos hasta un mes, adivina el siguiente y se compara con lo que realmente pasó. Luego se le da un mes más y se repite, más de cien veces.', 'Así se mide cómo le iría en la vida real.'],
+  error: ['Error promedio', 'Cuánto se equivoca el modelo, en promedio, al adivinar. Si es 2 %, quiere decir que sus proyecciones quedan, en promedio, 2 % por encima o por debajo del valor real. Menos es mejor.', 'Técnicamente es el MAPE.'],
+  ingenuo: ['Modelo ingenuo', 'La forma más simple de adivinar: “este mes será igual que el mismo mes del año pasado”. No es un modelo real; sirve de vara mínima. Un modelo que no le gane no sirve.', ''],
+  dm: ['Prueba de Diebold y Mariano', 'Responde una pregunta: ¿la diferencia entre los dos modelos es real o pudo ser suerte? Es como lanzar una moneda 10 veces: sacar 6 caras no prueba que esté cargada; sacar 10 sí.', 'Compara los errores de los dos modelos mes por mes.'],
+  estadistico: ['Estadístico', 'El número que produce la prueba. Si es negativo, el modelo estadístico se equivocó menos; si es positivo, la inteligencia artificial se equivocó menos. Mientras más lejos de cero, más clara la diferencia.', ''],
+  valorp: ['Valor p', 'La probabilidad de ver una diferencia así solo por casualidad. Si es menor que 0.05 (5 %), se acepta que la diferencia es real.', 'Por eso, valor p de 0.001: casi seguro no es suerte. Valor p de 0.09: no se puede asegurar.'],
+  shap: ['Valores SHAP', 'Un método para abrir la “caja negra” de la inteligencia artificial: reparte la proyección entre los datos que usó el modelo y dice cuánto aportó cada uno, como el desglose de una factura.', 'Se basa en un concepto de teoría de juegos de Lloyd Shapley, premio Nobel de Economía.'],
+  mae: ['MAE (error absoluto medio)', 'Cuánto se equivoca el modelo en promedio, en las mismas unidades de la serie: puntos del índice o millones de dólares.', ''],
+  rmse: ['RMSE', 'Parecido al MAE, pero castiga más los errores grandes. Si es mucho mayor que el MAE, el modelo a veces falla por mucho.', ''],
+  mape: ['MAPE', 'El error promedio en porcentaje. Es la medida más fácil de comparar entre series distintas.', ''],
+  mase: ['MASE', 'Compara el error del modelo con el del modelo ingenuo. Menor que 1 significa que lo supera.', 'En series que crecen mucho puede quedar mayor que 1 para todos; entonces se comparan las filas entre sí.']
+};
+
+// ---------------------------------------------------------------------------
+// Utilidades
+// ---------------------------------------------------------------------------
+const $ = id => document.getElementById(id);
+const fmt = (v,d) => Number(v).toLocaleString('es-HN',{minimumFractionDigits:d,maximumFractionDigits:d});
+const signed = (v,d) => (v >= 0 ? '+' : '−') + fmt(Math.abs(v), d);
+const parseMes = s => { const [y,m] = s.split('-').map(Number); return {y, m:m-1}; };
+const mesCorto = s => { const f = parseMes(s); return MES[f.m] + ' ' + f.y; };
+const mesLargo = s => { const f = parseMes(s); return MES_LARGO[f.m] + ' de ' + f.y; };
+const mesSolo = s => { const f = parseMes(s); return MES_LARGO[f.m] + ' ' + f.y; };
+const esc = t => String(t).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const ayuda = k => `<button type="button" class="q" data-g="${k}" aria-label="Ayuda: ${esc(GLOSARIO[k][0])}">?</button>`;
+// Atributos de la ayuda que aparece al pasar el cursor (o tocar) sobre una cifra.
+const tipA = (titulo, texto) => `tabindex="0" data-tt="${esc(titulo)}" data-tx="${esc(texto)}"`;
+const nMeses = h => h + (h===1 ? ' mes' : ' meses');
+const suma = a => a.reduce((x,y) => x+y, 0);
+const may = t => t.charAt(0).toUpperCase() + t.slice(1);
+function el(tag, attrs, html){ const e = document.createElement(tag); Object.assign(e, attrs||{}); if (html !== undefined) e.innerHTML = html; return e; }
+const reduce = () => window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
+const tactil = () => window.matchMedia && matchMedia('(hover: none)').matches;
+function guardar(k,v){ try { localStorage.setItem(k,v); } catch(e){} }
+function leer(k){ try { return localStorage.getItem(k); } catch(e){ return null; } }
+
+// ---------------------------------------------------------------------------
+// Ayuda con "?" (clic) y ayuda al pasar el cursor sobre las cifras
+// ---------------------------------------------------------------------------
+const pop = $('pop'), tt = $('tt');
+let abierto = null, ttEl = null;
+function cerrarAyuda(){ pop.style.display = 'none'; if (abierto) abierto.setAttribute('aria-expanded','false'); abierto = null; }
+function ttOcultar(){ tt.style.display = 'none'; ttEl = null; }
+function ttMostrar(e){
+  ttEl = e;
+  const t = e.dataset.tt, x = e.dataset.tx;
+  tt.innerHTML = (t ? `<div class="t">${esc(t)}</div>` : '') + `<div>${esc(x)}</div>`;
+  tt.style.display = 'block';
+  const r = e.getBoundingClientRect(), w = tt.offsetWidth, h = tt.offsetHeight;
+  const x0 = Math.min(window.innerWidth - w - 8, Math.max(8, r.left + r.width/2 - w/2));
+  let y0 = r.bottom + 8;
+  if (y0 + h > window.innerHeight - 8 && r.top - h - 8 > 8) y0 = r.top - h - 8;
+  tt.style.left = x0 + 'px'; tt.style.top = Math.max(8,y0) + 'px';
+}
+document.addEventListener('mouseover', ev => {
+  if (tactil()) return;
+  const t = ev.target.closest && ev.target.closest('[data-tx]');
+  if (t) { if (t !== ttEl) ttMostrar(t); } else if (ttEl) ttOcultar();
+});
+document.addEventListener('focusin', ev => { const t = ev.target.closest && ev.target.closest('[data-tx]'); if (t) ttMostrar(t); });
+document.addEventListener('focusout', ttOcultar);
+window.addEventListener('scroll', ttOcultar, {passive:true});
+document.addEventListener('click', ev => {
+  const t = ev.target.closest('[data-tx]');
+  if (tactil()) { if (t && t !== ttEl) ttMostrar(t); else ttOcultar(); }
+  const b = ev.target.closest('.q[data-g]');
+  if (!b){ if (!ev.target.closest('#pop')) cerrarAyuda(); return; }
+  ev.preventDefault(); ev.stopPropagation();
+  if (abierto === b){ cerrarAyuda(); return; }
+  cerrarAyuda();
+  const g = GLOSARIO[b.dataset.g]; if (!g) return;
+  pop.innerHTML = `<div class="t">${esc(g[0])}</div><div>${esc(g[1])}</div>` + (g[2] ? `<div class="x">${esc(g[2])}</div>` : '');
+  pop.style.display = 'block';
+  const r = b.getBoundingClientRect(), w = pop.offsetWidth, hgt = pop.offsetHeight;
+  const x = Math.min(window.innerWidth - w - 12, Math.max(12, r.left + r.width/2 - w/2));
+  let y = r.bottom + 8; if (y + hgt > window.innerHeight - 12 && r.top - hgt - 8 > 0) y = r.top - hgt - 8;
+  pop.style.left = (x + window.scrollX) + 'px'; pop.style.top = (y + window.scrollY) + 'px';
+  b.setAttribute('aria-expanded','true'); abierto = b;
+});
+document.addEventListener('keydown', e => { if (e.key === 'Escape'){ cerrarAyuda(); ttOcultar(); } });
+
+// ---------------------------------------------------------------------------
+// Cifras que usan varias secciones
+// ---------------------------------------------------------------------------
+function estacionalidad(S){
+  const v = S.historia.valores, f = S.historia.fechas, sm = Array(12).fill(0), cuenta = Array(12).fill(0);
+  for (let i = 6; i < v.length-6; i++){
+    let m = 0; for (let k = i-6; k <= i+6; k++) m += (k===i-6||k===i+6) ? v[k]/24 : v[k]/12;
+    const mes = parseMes(f[i]).m; sm[mes] += v[i]/m; cuenta[mes]++;
+  }
+  const idx = sm.map((s,i) => ({m:i, v:s/cuenta[i]})).sort((a,b) => b.v-a.v);
+  const nom = a => MES_LARGO[a.m];
+  return {altos: nom(idx[0]) + ' y ' + nom(idx[1]), bajos: nom(idx[11]) + ' y ' + nom(idx[10]), indice: idx};
+}
+
+function cifras(){
+  const I = DATOS.series.ipc, R = DATOS.series.rem;
+  const iv = I.historia.valores, n = iv.length, rv = R.historia.valores, rn = rv.length;
+  const sI = I.proyecciones.sarima, sR = R.proyecciones.sarima;
+  const c = {};
+  c.ipcUlt = iv[n-1]; c.ipcF = I.historia.fechas[n-1];
+  c.yoy = (iv[n-1]/iv[n-13]-1)*100;
+  c.fin = I.fechas_proyeccion[11];
+  c.infl = (sI[11].valor/iv[n-1]-1)*100;
+  c.inflLo = sI[11].inferior === null ? null : (sI[11].inferior/iv[n-1]-1)*100;
+  c.inflHi = sI[11].superior === null ? null : (sI[11].superior/iv[n-1]-1)*100;
+  c.remUlt = rv[rn-1]; c.remF = R.historia.fechas[rn-1];
+  c.remYoy = (rv[rn-1]/rv[rn-13]-1)*100;
+  c.rem12 = suma(rv.slice(-12));
+  c.remProy = suma(sR.map(p => p.valor));
+  c.remChg = (c.remProy/c.rem12-1)*100;
+  c.rem12m = sR[11];
+  c.est = estacionalidad(R);
+  const V = R.verificacion;
+  if (V && V.filas.length){
+    c.nVer = V.filas.length;
+    c.sesgoRem = (suma(V.filas.map(f => f.sarima)) / suma(V.filas.map(f => f.real)) - 1) * 100;
+    c.verIni = V.filas[0].mes; c.verFin = V.filas[V.filas.length-1].mes;
+  }
+  return c;
+}
+
+function nDM(S, quien){
+  const dm = S.diebold_mariano || [];
+  return dm.filter(d => d.favorecido === quien && d.valor_p < 0.05).length;
+}
+
+// ---------------------------------------------------------------------------
+// Gráfico de líneas con proyección en color (sirve para el Inicio y la pestaña 1)
+// ---------------------------------------------------------------------------
+let gUid = 0;
+function Grafico(root, o){
+  const uid = 'g' + (++gUid);
+  root.innerHTML = `<div class="chart-row${o.oscuro ? ' dark' : ''}" style="${o.margen === 0 ? 'margin-top:0' : ''}">
+    <div class="yaxis"></div>
+    <div style="flex:1 1 auto;min-width:0">
+      <div class="plot">
+        <div class="gl-l"></div><div class="split"></div><div class="split-l">Proyección →</div>
+        <div class="reveal"><svg viewBox="0 0 800 280" preserveAspectRatio="none" role="img" style="position:absolute;inset:0;width:100%;height:100%;overflow:visible"></svg></div>
+        <div class="marks"></div>
+        <div class="hover-line"></div><div class="hover-dot"></div><div class="tip"></div>
+      </div>
+      <div class="xaxis"></div>
+    </div></div>`;
+  const q = s => root.querySelector(s);
+  const plot = q('.plot'), svg = q('svg'), marks = q('.marks'), hl = q('.hover-line'), hd = q('.hover-dot'), tip = q('.tip'), rev = q('.reveal');
+
+  function dibujar(h, anim){
+    const hist = o.hist, nH = hist.length, N = nH + h, last = nH - 1;
+    const ser = o.series.map(s => Object.assign({}, s, {fc: s.fc.slice(0,h)}));
+    const todos = hist.slice();
+    ser.forEach(s => s.fc.forEach(x => { todos.push(x.valor); if (x.inferior !== null) todos.push(x.inferior); if (x.superior !== null) todos.push(x.superior); }));
+    let lo = Math.min(...todos), hi = Math.max(...todos);
+    const pad = (hi-lo)*0.08 || 1; lo -= pad; hi += pad;
+    const X = i => N > 1 ? i/(N-1)*800 : 0;
+    const Y = v => 280 - (v-lo)/(hi-lo)*280;
+    const f1 = v => v.toFixed(1);
+    const pt = (i,v) => f1(X(i)) + ',' + f1(Y(v));
+    const nt = TEMA === 'oscuro';
+    const cH = o.oscuro ? '#CFE0F7' : (nt ? '#E8EEF6' : '#1B1F24'), cA = o.oscuro ? '#8FB8EA' : ACCENT;
+    const yb = Y(hist[last]);
+    let s = `<defs><linearGradient id="ar-${uid}" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${cA}" stop-opacity=".30"/><stop offset="1" stop-color="${cA}" stop-opacity="0"/></linearGradient>`;
+    ser.forEach(m => { s += `<linearGradient id="bd-${uid}-${m.id}" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${m.color}" stop-opacity=".45"/><stop offset="1" stop-color="${m.color}" stop-opacity=".10"/></linearGradient>`; });
+    s += `<clipPath id="up-${uid}"><rect x="-20" y="-600" width="840" height="${f1(yb+600)}"/></clipPath><clipPath id="dn-${uid}"><rect x="-20" y="${f1(yb)}" width="840" height="${f1(280-yb+600)}"/></clipPath></defs>`;
+    // Área bajo la historia
+    const hp = hist.map((v,i) => pt(i,v)).join(' ');
+    s += `<polygon points="${hp} ${f1(X(last))},280 0,280" fill="url(#ar-${uid})"/>`;
+    // Cinta de color: cuánto se aleja la proyección del último dato (verde = favorable, naranja = desfavorable)
+    const P = ser[o.cinta || 0];
+    if (P && P.fc.length){
+      const rib = [f1(X(last)) + ',' + f1(yb)].concat(P.fc.map((x,k) => pt(nH+k, x.valor)), [f1(X(N-1)) + ',' + f1(yb)]).join(' ');
+      const cUp = o.bueno ? GOOD : BAD, cDn = o.bueno ? BAD : GOOD;
+      const fo = o.oscuro ? '.6' : '.42';
+      s += `<polygon points="${rib}" fill="${cUp}" fill-opacity="${fo}" clip-path="url(#up-${uid})"/><polygon points="${rib}" fill="${cDn}" fill-opacity="${fo}" clip-path="url(#dn-${uid})"/>`;
+      s += `<line x1="${f1(X(last))}" x2="${f1(X(N-1))}" y1="${f1(yb)}" y2="${f1(yb)}" stroke="${o.oscuro ? '#CFE0F7' : (nt ? '#94A3B6' : '#5B6470')}" stroke-width="1" stroke-dasharray="2 4" vector-effect="non-scaling-stroke"/>`;
+    }
+    // Rangos probables
+    ser.forEach(m => {
+      if (!m.fc.length || m.fc.some(x => x.inferior === null)) return;
+      const up = [pt(last, hist[last])].concat(m.fc.map((x,k) => pt(nH+k, x.superior)));
+      const dn = m.fc.map((x,k) => pt(nH+k, x.inferior)).reverse();
+      s += `<polygon points="${up.concat(dn).join(' ')}" fill="url(#bd-${uid}-${m.id})" stroke="${m.color}" stroke-opacity=".5" stroke-width="1" vector-effect="non-scaling-stroke"/>`;
+    });
+    // Historia y proyecciones
+    s += `<polyline points="${hp}" fill="none" stroke="${cH}" stroke-width="2" vector-effect="non-scaling-stroke" stroke-linejoin="round"/>`;
+    ser.forEach(m => {
+      if (!m.fc.length) return;
+      s += `<polyline points="${[pt(last, hist[last])].concat(m.fc.map((x,k) => pt(nH+k, x.valor))).join(' ')}" fill="none" stroke="${m.color}" stroke-width="3.2" stroke-dasharray="7 4" stroke-linecap="round" stroke-linejoin="round" vector-effect="non-scaling-stroke"/>`;
+    });
+    svg.innerHTML = s;
+    svg.setAttribute('aria-label', o.etiqueta || 'Gráfico de la serie y su proyección');
+
+    // Puntos y etiquetas finales (HTML, para que no se deformen)
+    let m = '';
+    ser.forEach(mo => mo.fc.forEach((x,k) => {
+      const izq = ((nH+k)/(N-1)*100).toFixed(2), arr = ((1-(x.valor-lo)/(hi-lo))*100).toFixed(2);
+      m += `<div class="mk" style="left:${izq}%;top:${arr}%;background:${mo.color}"></div>`;
+      if (k === mo.fc.length-1) m += `<div class="endtag" style="left:${izq}%;top:${arr}%;background:${mo.color}">${fmt(x.valor,o.dec)}</div>`;
+    }));
+    marks.innerHTML = m;
+
+    // Ejes
+    const ys = [0,1,2,3].map(g => lo + (hi-lo)*(0.1 + g*0.8/3));
+    q('.yaxis').replaceChildren(...ys.map(v => { const d = el('div',{},fmt(v,o.decEje)); d.style.top = ((1-(v-lo)/(hi-lo))*100).toFixed(2)+'%'; return d; }));
+    q('.gl-l').replaceChildren(...ys.map(v => { const d = el('div',{className:'grid'}); d.style.top = ((1-(v-lo)/(hi-lo))*100).toFixed(2)+'%'; return d; }));
+    const todasF = o.fechas.concat(o.fechasProy.slice(0,h));
+    const w = plot.clientWidth || 600, maxT = Math.max(3, Math.floor(w/76));
+    const need = Math.ceil(N/maxT);
+    const paso = [1,3,6,12,24,36,60,120].find(s => s >= need) || 120;
+    const ticks = []; for (let t = 0; t < N; t += paso) ticks.push(t);
+    q('.xaxis').replaceChildren(...ticks.map(t => { const d = el('div',{},mesCorto(todasF[t])); d.style.left = (t/(N-1)*100).toFixed(2)+'%'; return d; }));
+    const pos = (last/(N-1)*100).toFixed(2)+'%';
+    q('.split').style.left = pos;
+    const sl = q('.split-l'); sl.style.left = pos;
+    const izq = last/(N-1) > 0.85;
+    sl.style.transform = izq ? 'translateX(-100%)' : 'none';
+    sl.style.padding = izq ? '0 6px 0 0' : '0 0 0 6px';
+    sl.style.display = h > 0 ? '' : 'none';
+
+    // Revelado animado
+    rev.classList.remove('anim');
+    if (anim && !reduce()){ void rev.offsetWidth; rev.classList.add('anim'); rev.style.animationDelay = (typeof anim === 'number' && anim > 0) ? anim + 's' : ''; }
+
+    // Interacción: cursor o dedo
+    const mover = clientX => {
+      const r = plot.getBoundingClientRect();
+      const i = Math.max(0, Math.min(N-1, Math.round((clientX - r.left)/r.width*(N-1))));
+      const proy = i > last;
+      const left = i/(N-1)*100;
+      hl.style.display = hd.style.display = tip.style.display = 'block';
+      hl.style.left = left + '%';
+      let html = '<div class="m">' + mesCorto(todasF[i]) + '</div>';
+      let vDot, cDot;
+      if (!proy){
+        vDot = hist[i]; cDot = o.oscuro ? '#8FB8EA' : cH;
+        html += `<div class="r"><span>${o.nombreReal || 'Dato real'}</span><b>${fmt(vDot,o.dec)}</b></div>`;
+      } else {
+        ser.forEach((mo,j) => {
+          const x = mo.fc[i-nH]; if (!x) return;
+          if (j === 0){ vDot = x.valor; cDot = mo.color; }
+          html += `<div class="r"><span><i class="dot" style="background:${mo.color}"></i> ${mo.nombre}</span><b>${fmt(x.valor,o.dec)}</b></div>`;
+          if (x.inferior !== null) html += `<div class="r"><span style="padding-left:16px">Rango probable</span><b>${fmt(x.inferior,o.dec)}–${fmt(x.superior,o.dec)}</b></div>`;
+        });
+        const ult = hist[last], v0 = ser[0].fc[i-nH].valor;
+        const cambio = (v0/ult-1)*100;
+        html += `<div class="r"><span>Frente al último dato</span><b style="color:${(cambio >= 0) === !!o.bueno ? GOOD : BAD}">${signed(cambio,1)} %</b></div>`;
+      }
+      hd.style.left = left + '%'; hd.style.top = ((1-(vDot-lo)/(hi-lo))*100) + '%'; hd.style.background = cDot;
+      tip.innerHTML = html;
+      const tw = tip.offsetWidth;
+      let px = clientX - r.left + 14; if (px + tw > r.width) px = clientX - r.left - tw - 14;
+      tip.style.left = Math.max(0,px) + 'px';
+    };
+    const ocultar = () => { hl.style.display = hd.style.display = tip.style.display = 'none'; };
+    plot.onmousemove = e => mover(e.clientX);
+    plot.onmouseleave = ocultar;
+    plot.ontouchstart = plot.ontouchmove = e => { if (e.touches[0]) mover(e.touches[0].clientX); };
+    plot.ontouchend = () => setTimeout(ocultar, 2500);
+  }
+  return {dibujar};
+}
+
+// ---------------------------------------------------------------------------
+// Navegación entre secciones
+// ---------------------------------------------------------------------------
+function ajustarMarco(){
+  try {
+    const f = window.frameElement;
+    if (f) f.style.height = Math.max(640, $('app').offsetHeight + 4) + 'px';
+  } catch(e){}
+}
+// Dentro de Streamlit la página es tan alta como su contenido, así que la barra
+// se desplaza con el scroll del documento padre para que siempre quede a la vista.
+function fijarNav(){
+  let f = null, P = null;
+  try { f = window.frameElement; P = f && f.ownerDocument.defaultView; if (!P || !P.document.body) return; } catch(e){ return; }
+  const nav = document.querySelector('.topnav');
+  nav.style.position = 'relative'; nav.style.top = 'auto';
+  // En pantallas táctiles el scroll con inercia llega tarde al marco y la barra
+  // salta sobre el contenido: ahí la barra se queda arriba y se desplaza con la página.
+  if (P.matchMedia && P.matchMedia('(pointer:coarse)').matches) return;
+  let pend = false;
+  const act = () => { pend = false; try {
+    const h = P.document.querySelector('[data-testid="stHeader"]');
+    const top = h ? h.getBoundingClientRect().bottom : 0;
+    const r = f.getBoundingClientRect();
+    const max = Math.max(0, $('app').offsetHeight - nav.offsetHeight);
+    const y = Math.min(max, Math.max(0, top - r.top));
+    nav.style.transform = y ? 'translateY(' + y + 'px)' : '';
+    nav.classList.toggle('pegada', y > 2);
+  } catch(e){} };
+  const on = () => { if (!pend){ pend = true; P.requestAnimationFrame(act); } };
+  P.document.addEventListener('scroll', on, true);
+  P.addEventListener('resize', on);
+  setInterval(on, 400);
+  act();
+}
+function ponerTema(t, repintar){
+  TEMA = t === 'oscuro' ? 'oscuro' : 'claro';
+  document.documentElement.dataset.theme = TEMA;
+  colores();
+  const b = $('btn-tema');
+  if (b){ b.setAttribute('aria-label', TEMA === 'oscuro' ? 'Cambiar a modo claro' : 'Cambiar a modo oscuro'); b.setAttribute('aria-pressed', TEMA === 'oscuro'); }
+  if (repintar){
+    irA(st.pagina, {silencioso:true, anim:false});
+  }
+}
+function subirAlInicio(){
+  try { if (window.frameElement) window.frameElement.scrollIntoView({block:'start'}); } catch(e){}
+  window.scrollTo(0,0);
+}
+function pintarEnlaces(){
+  $('links').replaceChildren(...PAGINAS.map(([id,lab]) => {
+    const b = el('button',{type:'button',className:'lk'}, lab);
+    b.dataset.ir = id;
+    if (st.pagina === id) b.setAttribute('aria-current','page');
+    return b;
+  }));
+}
+function irA(p, opc){
+  opc = opc || {};
+  cerrarAyuda(); ttOcultar();
+  st.pagina = p;
+  PAGINAS.forEach(([id]) => $('page-'+id).classList.toggle('hidden', id !== p));
+  pintarEnlaces();
+  const ilus = DATOS.ilustrativo;
+  const ult = DATOS.series.ipc.historia.fechas;
+  const b = $('badge');
+  b.className = 'pill ' + (ilus ? 'warn' : 'ok');
+  b.textContent = ilus ? 'Datos ilustrativos' : 'Datos oficiales del BCH al ' + mesCorto(ult[ult.length-1]);
+  if (p === 'inicio') renderInicio(opc.anim);
+  if (p === 'proy') render();
+  if (p === 'rec') renderRec();
+  if (p === 'calc') renderCalc();
+  if (p === 'info') renderInfo();
+  pintarPie();
+  if (!opc.silencioso) subirAlInicio();
+  try { history.replaceState(null, '', '#' + p); } catch(e){}
+  setTimeout(ajustarMarco, 60);
+}
+document.addEventListener('click', ev => {
+  const b = ev.target.closest('[data-ir]');
+  if (!b) return;
+  ev.preventDefault();
+  if (b.dataset.serie) st.serie = b.dataset.serie;
+  if (b.dataset.h) st.h = +b.dataset.h;
+  if (b.dataset.tab) st.tab = b.dataset.tab;
+  irA(b.dataset.ir);
+});
+
+// ---------------------------------------------------------------------------
+// Animación de números (Inicio)
+// ---------------------------------------------------------------------------
+function contar(raiz, animar){
+  raiz.querySelectorAll('.cnt').forEach(e => {
+    const v = +e.dataset.v, d = +(e.dataset.d || 0), pre = e.dataset.pre || '', suf = e.dataset.suf || '', sg = e.dataset.sg === '1';
+    const txt = x => pre + (sg ? signed(x,d) : fmt(x,d)) + suf;
+    if (!animar || reduce()){ e.textContent = txt(v); return; }
+    const t0 = performance.now(), dur = 1100;
+    const paso = t => { const k = Math.min(1,(t-t0)/dur), ease = 1 - Math.pow(1-k,3); e.textContent = txt(v*ease); if (k < 1) requestAnimationFrame(paso); };
+    requestAnimationFrame(paso);
+  });
+}
+
+// ---------------------------------------------------------------------------
+// Inicio
+// ---------------------------------------------------------------------------
+const CHECK = '<svg width="16" height="16" viewBox="0 0 24 24" aria-hidden="true"><polyline points="4 12 10 18 20 6"></polyline></svg>';
+function claseInfl(x){ return x > 5 ? 'bad' : (x >= 3 ? 'good' : ''); }
+
+function barrasModelos(S, cfg, h){
+  const D = S.desempeno[String(h)];
+  if (!D) return '<p class="note">Sin resultados para este plazo.</p>';
+  const filas = [['sarima',MODELOS.sarima.label,ACCENT],['xgb',MODELOS.xgb.label,ML],['ingenuo','Modelo ingenuo',NAIVE]].filter(f => D[f[0]]);
+  const mx = Math.max(...filas.map(f => D[f[0]].MAPE));
+  return filas.map(([k,n,c]) => {
+    const m = D[k].MAPE;
+    const tip = tipA(n + ' · ' + cfg.corto + ' a ' + nMeses(h), 'En el examen, al proyectar ' + nMeses(h) + ' hacia adelante, se equivocó en promedio ' + fmt(m,1) + ' %: por cada 100 de valor real, se desvió unos ' + fmt(m,1) + '. Menos es mejor.');
+    return `<div class="ebar eb2"><div class="lab"><span class="dot" style="background:${c}"></span>${n}</div><div class="trk"><div class="fill" style="width:${(m/mx*100).toFixed(1)}%;background:${c};opacity:${k==='ingenuo'?0.5:0.92}"></div></div><div class="val" ${tip}>se equivoca <b>${fmt(m,1)} %</b></div></div>`;
+  }).join('');
+}
+
+function renderInicio(anim){
+  const c = cifras(), I = DATOS.series.ipc, R = DATOS.series.rem;
+  const inflCls = claseInfl(c.infl), yoyCls = claseInfl(c.yoy);
+  const nI = nDM(I,'sarima'), nR = nDM(R,'sarima'), totI = (I.diebold_mariano||[]).length, totR = (R.diebold_mariano||[]).length;
+  const rango = c.inflLo === null ? '' : ' Rango probable: de ' + fmt(c.inflLo,1) + ' % a ' + fmt(c.inflHi,1) + ' %.';
+  const metaTxt = c.infl > 5 ? 'Está por encima del rango meta del BCH (3 % a 5 %).' : (c.infl >= 3 ? 'Queda dentro del rango meta del BCH (3 % a 5 %).' : 'Queda por debajo del rango meta del BCH (3 % a 5 %).');
+  const filaF = (k, cls, v, d, pre, suf, sg, nota, tipT, tipX) => `<div class="fig ${cls}" ${tipA(tipT, tipX)}><div class="k">${k}</div><div class="v cnt" data-v="${v}" data-d="${d}" data-pre="${pre}" data-suf="${suf}" data-sg="${sg}">0</div><div class="n">${nota}</div></div>`;
+  const ico = p => `<span class="ic"><svg width="24" height="24" viewBox="0 0 24 24" aria-hidden="true">${p}</svg></span>`;
+
+  $('page-inicio').innerHTML = `
+  <section class="hero"><div class="wrap in">
+    <div>
+      <h1>Qué esperar de los precios y las remesas en Honduras</h1>
+      <p class="sub">Proyecciones mensuales con datos del Banco Central, el rango donde probablemente caerá cada valor y la explicación de cada número, en palabras sencillas.</p>
+      <div class="cta">
+        <button type="button" class="btn pri" data-ir="proy">Ver la proyección</button>
+        <button type="button" class="btn sec" data-ir="calc">Calcular mi inflación</button>
+      </div>
+      <ul class="conf">
+        <li>${CHECK} Datos oficiales del BCH</li>
+        <li>${CHECK} Rango probable en cada cifra</li>
+        <li>${CHECK} Cada resultado explicado</li>
+      </ul>
+    </div>
+    <div class="hpanel">
+      <div class="top">
+        <div class="seg" role="group" aria-label="Serie del gráfico"><button type="button" data-hs="ipc" aria-pressed="${st.hs==='ipc'}">Precios (IPC)</button><button type="button" data-hs="rem" aria-pressed="${st.hs==='rem'}">Remesas</button></div>
+        <span style="font-size:12px;color:var(--sky-2)">Calculado con el modelo estadístico, el que menos se equivocó</span>
+      </div>
+      <div class="hread" id="h-read"></div>
+      <div id="h-chart"></div>
+      <div class="hslide"><label for="h-rng">Mueva para cambiar la fecha</label><input type="range" id="h-rng" min="1" max="12" value="${st.hh}"><b id="h-rng-v" style="font-family:var(--mono);color:#fff;font-size:14px;min-width:84px"></b></div>
+      <div class="hmeta">La línea clara es lo que ya pasó. La línea de color es la proyección y la franja es el rango probable. El área verde o naranja muestra cuánto se aleja del último dato.</div>
+    </div>
+  </div></section>
+
+  <section class="band wrap">
+    <h2 class="sec-t">Los números de hoy</h2>
+    <p class="sec-s">Calculados con los datos oficiales hasta ${mesSolo(c.ipcF)}. Pase el cursor sobre cada cifra para ver qué significa.</p>
+    <div class="figs">
+      ${filaF('Inflación de los últimos 12 meses', yoyCls, c.yoy, 1, '', ' %', 0, 'Cuánto subieron los precios de ' + mesCorto(I.historia.fechas[I.historia.fechas.length-13]) + ' a ' + mesCorto(c.ipcF) + '.', 'Inflación de los últimos 12 meses', 'Se calcula dividiendo el IPC de ' + mesSolo(c.ipcF) + ' (' + fmt(c.ipcUlt,1) + ') entre el de un año antes (' + fmt(I.historia.valores[I.historia.valores.length-13],1) + '). Mide cuánto más caro está lo mismo que se compraba hace un año.')}
+      ${filaF('Inflación esperada a 12 meses', inflCls, c.infl, 1, '', ' %', 0, metaTxt + rango, 'Inflación esperada', 'Es la proyección del modelo estadístico para ' + mesSolo(c.fin) + ' dividida entre el último dato real. No es una certeza: el rango probable muestra cuánto puede variar.')}
+      ${filaF('Remesas del último mes (millones de US$)', c.remYoy >= 0 ? 'good' : 'bad', c.remUlt, 0, 'US$ ', '', 0, mesSolo(c.remF) + ': ' + signed(c.remYoy,1) + ' % frente al mismo mes del año anterior.', 'Remesas del último mes', 'Ingresos por transferencias corrientes de ' + mesSolo(c.remF) + ', que incluyen las remesas familiares. Se comparan con el mismo mes del año anterior para quitar el efecto de la época del año.')}
+      ${filaF('Remesas esperadas, próximos 12 meses (millones de US$)', c.remChg >= 0 ? 'good' : 'bad', c.remProy, 0, 'US$ ', '', 0, signed(c.remChg,1) + ' % frente a los 12 meses anteriores (US$ ' + fmt(c.rem12,0) + ' millones).', 'Remesas esperadas', 'Suma de las proyecciones mensuales del modelo estadístico de ' + mesCorto(R.fechas_proyeccion[0]) + ' a ' + mesCorto(R.fechas_proyeccion[11]) + '. Cada mes tiene su propio rango probable; la suma anual es una referencia, no una promesa.')}
+    </div>
+  </section>
+
+  <section class="band wrap" style="padding-top:10px">
+    <h2 class="sec-t">¿Qué quiere hacer?</h2>
+    <div class="feat">
+      <button type="button" class="fc" data-ir="proy">${ico('<polyline points="3 17 9 11 13 15 21 7"></polyline><polyline points="15 7 21 7 21 13"></polyline>')}<h3>Ver la proyección</h3><p>Cuánto se espera de los precios y las remesas a 1, 3, 6 o 12 meses, con su rango probable y la razón de cada número.</p><span class="go">Abrir proyección</span></button>
+      <button type="button" class="fc" data-ir="rec">${ico('<path d="M9 11l3 3 8-8"></path><path d="M20 12v7a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h9"></path>')}<h3>Saber qué hacer</h3><p>Acciones sugeridas según la proyección, para un hogar, una familia que recibe remesas, un negocio o una institución.</p><span class="go">Ver recomendaciones</span></button>
+      <button type="button" class="fc" data-ir="calc">${ico('<rect x="5" y="3" width="14" height="18" rx="2"></rect><line x1="8" y1="7" x2="16" y2="7"></line><line x1="8" y1="12" x2="8" y2="12"></line><line x1="12" y1="12" x2="12" y2="12"></line><line x1="16" y1="12" x2="16" y2="12"></line><line x1="8" y1="16" x2="8" y2="16"></line><line x1="12" y1="16" x2="16" y2="16"></line>')}<h3>Calcular la inflación</h3><p>Compare cuánto vale un monto entre dos fechas y vea cuánto poder de compra gana o pierde su dinero.</p><span class="go">Abrir calculadora</span></button>
+      <button type="button" class="fc" data-ir="info">${ico('<circle cx="12" cy="12" r="9"></circle><line x1="12" y1="11" x2="12" y2="16"></line><line x1="12" y1="8" x2="12" y2="8"></line>')}<h3>Entender los conceptos</h3><p>Qué son el IPC y las remesas, de dónde salen los datos, cómo se hicieron las proyecciones y un glosario sin tecnicismos.</p><span class="go">Ir a información</span></button>
+    </div>
+  </section>
+
+  <section class="band wrap" style="padding-top:10px">
+    <h2 class="sec-t">Cómo funciona</h2>
+    <div class="how">
+      <div><span class="n">1</span><h3>Datos oficiales</h3><p>Se parte de las series mensuales del Banco Central de Honduras: el índice de precios desde el año 2000 y los ingresos por transferencias corrientes, que incluyen las remesas.</p></div>
+      <div><span class="n">2</span><h3>Dos modelos compiten</h3><p>Un modelo estadístico clásico (SARIMA) y una inteligencia artificial (machine learning, XGBoost) proyectan los mismos meses. Se les hizo un examen con más de cien pruebas.</p></div>
+      <div><span class="n">3</span><h3>Cada número se explica</h3><p>Para cada proyección se ve de dónde sale, cuánto aporta cada dato y qué tan confiable ha sido ese modelo en el pasado.</p></div>
+    </div>
+  </section>
+
+  <section class="band wrap" style="padding-top:10px">
+    <div style="display:flex;flex-wrap:wrap;gap:12px 24px;align-items:flex-end;justify-content:space-between">
+      <div><h2 class="sec-t">¿Quién acierta más?</h2>
+      <p class="sec-s">El modelo estadístico ganó con una diferencia real en ${nI + nR} de ${totI + totR} comparaciones; en ${totI + totR - nI - nR === 1 ? 'la otra' : 'las otras ' + (totI + totR - nI - nR)} no se puede asegurar cuál es mejor. Las barras muestran el error promedio: menos es mejor.</p></div>
+      <div class="seg claro" role="group" aria-label="Plazo">${[1,3,6,12].map(h => `<button type="button" data-hz="${h}" aria-pressed="${st.hz===h}">${nMeses(h)}</button>`).join('')}</div>
+    </div>
+    <div class="two" id="hz-paneles"></div>
+  </section>`;
+
+  // Gráfico del Inicio
+  const raiz = $('page-inicio');
+  const pintarHero = a => {
+    const S = DATOS.series[st.hs], cfg = SERIES[st.hs];
+    const n = S.historia.valores.length, K = 48;
+    const hist = S.historia.valores.slice(n-K), fechas = S.historia.fechas.slice(n-K);
+    const gr = Grafico($('h-chart'), {fechas, hist, fechasProy:S.fechas_proyeccion, dec:cfg.dec, decEje:cfg.decEje, bueno:cfg.bueno, oscuro:true, margen:0,
+      series:[{id:'sarima', nombre:MODELOS.sarima.label, color:'#6FB1FF', fc:S.proyecciones.sarima}],
+      etiqueta:cfg.largo + ': últimos cuatro años y proyección'});
+    const lectura = h => {
+      const P = S.proyecciones.sarima[h-1], ult = hist[hist.length-1], ch = (P.valor/ult-1)*100, fav = (ch >= 0) === cfg.bueno;
+      const rg = P.inferior === null ? '' : ' · Rango probable ' + fmt(P.inferior,cfg.dec) + ' a ' + fmt(P.superior,cfg.dec);
+      $('h-read').innerHTML = `<span class="big" ${tipA('Proyección de ' + mesSolo(S.fechas_proyeccion[h-1]), 'Valor que calcula el modelo estadístico para ese mes. ' + (st.hs==='ipc' ? 'El último dato real es ' + fmt(ult,1) + ' puntos.' : 'El último dato real es US$ ' + fmt(ult,0) + ' millones.'))}>${fmt(P.valor,cfg.dec)}</span>` +
+        `<span class="chg ${fav ? 'up-good' : 'up-bad'}" ${tipA('Cambio frente al último dato', (ch >= 0 ? 'Subiría ' : 'Bajaría ') + fmt(Math.abs(ch),1) + ' % respecto de ' + mesSolo(hist.length ? S.historia.fechas[S.historia.fechas.length-1] : '') + '. Verde: favorable. Naranja: desfavorable para las personas.')}>${signed(ch,1)} %</span>` +
+        `<span class="rng">${mesSolo(S.fechas_proyeccion[h-1])}${rg}</span>`;
+      $('h-rng-v').textContent = nMeses(h);
+    };
+    gr.dibujar(st.hh, a); lectura(st.hh);
+    $('h-rng').oninput = e => { st.hh = +e.target.value; gr.dibujar(st.hh, false); lectura(st.hh); };
+  };
+  pintarHero(anim ? true : false);
+  raiz.querySelectorAll('[data-hs]').forEach(b => b.onclick = () => { st.hs = b.dataset.hs; raiz.querySelectorAll('[data-hs]').forEach(x => x.setAttribute('aria-pressed', x.dataset.hs===st.hs)); pintarHero(true); });
+
+  const pintarAcierto = () => {
+    $('hz-paneles').innerHTML = [['ipc','Precios (IPC)'],['rem','Remesas familiares']].map(([k,t]) => `<div class="panel"><h3>${t}</h3>${barrasModelos(DATOS.series[k], SERIES[k], st.hz)}</div>`).join('');
+  };
+  pintarAcierto();
+  raiz.querySelectorAll('[data-hz]').forEach(b => b.onclick = () => { st.hz = +b.dataset.hz; raiz.querySelectorAll('[data-hz]').forEach(x => x.setAttribute('aria-pressed', +x.dataset.hz===st.hz)); pintarAcierto(); });
+  contar(raiz, !!anim);
+}
+
+// ---------------------------------------------------------------------------
+// Proyección: panel de opciones y pestañas
+// ---------------------------------------------------------------------------
+if (leer('guia-cerrada') === '1') $('guia').classList.add('hidden');
+$('guia-cerrar').onclick = () => { $('guia').classList.add('hidden'); guardar('guia-cerrada','1'); };
+$('btn-guia').onclick = () => { $('guia').classList.remove('hidden'); $('guia').scrollIntoView({behavior:'smooth', block:'start'}); };
+$('chk-comparar').onchange = e => { st.comparar = e.target.checked; render(); };
+
+function render(sinAnim){
+  cerrarAyuda();
+  const S = DATOS.series[st.serie], cfg = SERIES[st.serie], mod = MODELOS[st.modelo];
+  const fechas = S.historia.fechas, vals = S.historia.valores;
+  const ultimoF = fechas[fechas.length-1], ultimo = vals[vals.length-1];
+  const P = S.proyecciones[st.modelo], h = st.h, p = P[h-1];
+  const fechaObj = S.fechas_proyeccion[h-1];
+
+  $('opt-serie').replaceChildren(...Object.entries(SERIES).map(([id,s]) => {
+    const x = el('button',{type:'button',className:'opt'},`<span class="l">${s.label}</span><span class="s">${s.sub}</span>`);
+    x.setAttribute('aria-pressed', st.serie===id); x.onclick = () => { st.serie=id; render(); }; return x;
+  }));
+  $('opt-h').replaceChildren(...[1,3,6,12].map(n => {
+    const lab = mesCorto(S.fechas_proyeccion[n-1]);
+    const x = el('button',{type:'button',className:'hbtn'}, may(lab) + `<small>en ${nMeses(n)}</small>`);
+    x.setAttribute('aria-pressed', st.h===n);
+    x.onclick = () => { st.h=n; render(); }; return x;
+  }));
+  $('note-h').textContent = 'Contando desde el último dato publicado: ' + mesSolo(ultimoF) + '.';
+  $('opt-modelo').replaceChildren(...Object.entries(MODELOS).map(([id,m]) => {
+    const x = el('button',{type:'button',className:'opt'},`<span class="l"><span class="dot" style="background:${m.color}"></span>${m.label}</span><span class="s">${m.sub}</span>`);
+    x.setAttribute('aria-pressed', st.modelo===id); x.onclick = () => { st.modelo=id; render(); }; return x;
+  }));
+  $('note-fechas').innerHTML = 'Último dato: ' + mesSolo(ultimoF) + '<br>Actualizado: ' + DATOS.generado.split('-').reverse().join('/');
+  $('chk-comparar').checked = st.comparar;
+
+  $('tabs').replaceChildren(...TABS.map(([id,lab],i) => {
+    const x = el('button',{type:'button',className:'tab',role:'tab'}, `<span class="n">${i+1}</span>${lab}`);
+    x.setAttribute('aria-selected', st.tab===id); x.onclick = () => { st.tab=id; render(); }; return x;
+  }));
+  TABS.forEach(([id]) => { const s = $('tab-'+id); s.classList.toggle('hidden', st.tab!==id); if (st.tab===id) s.style.display='flex'; });
+
+  if (st.tab==='proy') renderProy(S,cfg,mod,P,p,h,ultimo,ultimoF,fechaObj,sinAnim);
+  if (st.tab==='exp') renderExp(S,cfg);
+  if (st.tab==='des') renderDes(S,cfg);
+  setTimeout(ajustarMarco, 60);
+}
+
+// ---------------------------------------------------------------------------
+// 1 · Proyección
+// ---------------------------------------------------------------------------
+function renderProy(S,cfg,mod,P,p,h,ultimo,ultimoF,fechaObj,sinAnim){
+  const varPct = (p.valor/ultimo - 1)*100;
+  const fav = (varPct >= 0) === cfg.bueno;
+  const tieneBanda = p.inferior !== null;
+  const d0 = st.serie==='ipc' ? 1 : 0;
+  const colCambio = fav ? GOOD : BAD;
+  const kpis = [
+    {k:'Último dato · ' + mesCorto(ultimoF), v:fmt(ultimo,cfg.dec), n:cfg.unidad, g:st.serie==='ipc' ? 'ipc' : 'remesas', borde:'var(--ink)',
+      t:['Último dato publicado', 'Es lo que realmente pasó en ' + mesSolo(ultimoF) + ', según el Banco Central. Es el punto desde el que se mide todo lo que viene.']},
+    {k:'Proyección · ' + mesCorto(fechaObj), v:fmt(p.valor,cfg.dec), n:'Calculada con ' + mod.el, g:'proyeccion', borde:mod.color,
+      t:['Proyección para ' + mesSolo(fechaObj), 'El valor que ' + mod.el + ' (' + mod.tec + ') calcula para ese mes. Es la mejor estimación de hoy, no una certeza.']},
+    {k:'Cambio esperado', v:signed(varPct,1) + ' %', n:(varPct>=0 ? 'Subiría' : 'Bajaría') + ' respecto del último dato', g:null, borde:colCambio, color:colCambio,
+      t:['Cambio esperado', 'Compara la proyección (' + fmt(p.valor,cfg.dec) + ') con el último dato (' + fmt(ultimo,cfg.dec) + '). ' + (st.serie==='ipc' ? 'Un IPC más alto significa que las cosas cuestan más (naranja).' : 'Más remesas significa más dinero llegando a las familias (verde).')]},
+    {k:'Rango probable', v:tieneBanda ? fmt(p.inferior,d0) + '–' + fmt(p.superior,d0) : 'No disponible', n:'El valor real casi seguro cae aquí', g:'intervalo', borde:mod.color,
+      t:['Rango probable (95 %)', tieneBanda ? 'En 95 de cada 100 casos parecidos, el valor real quedó entre ' + fmt(p.inferior,d0) + ' y ' + fmt(p.superior,d0) + '. Mientras más lejos la fecha, más ancho el rango.' : 'Este modelo no entrega rango para esta fecha.']}
+  ];
+  $('kpis').replaceChildren(...kpis.map(k => el('div',{className:'kpi'},`<div class="k">${k.k}${k.g ? ' ' + ayuda(k.g) : ''}</div><div class="v" ${tipA(k.t[0],k.t[1])} ${k.color ? 'style="color:'+k.color+'"' : ''}>${k.v}</div><div class="n">${k.n}</div>`)));
+  [...$('kpis').children].forEach((e,i) => { e.style.borderTopColor = kpis[i].borde; });
+  $('chart-title').innerHTML = (st.serie==='ipc' ? 'Precios (IPC)' : 'Remesas familiares (millones de US$)') + ' · ¿qué pasaría en ' + nMeses(h) + '?';
+
+  // Gráfico
+  const ids = st.comparar ? ['sarima','xgb'] : [st.modelo];
+  const series = ids.map(id => ({id, nombre:MODELOS[id].label, color:MODELOS[id].color, fc:S.proyecciones[id]}));
+  const n = S.historia.valores.length;
+  const gr = Grafico($('chart-root'), {fechas:S.historia.fechas.slice(n-HISTORIA), hist:S.historia.valores.slice(n-HISTORIA), fechasProy:S.fechas_proyeccion, series, cinta:Math.max(0,ids.indexOf(st.modelo)),
+    dec:cfg.dec, decEje:cfg.decEje, bueno:cfg.bueno, etiqueta:cfg.largo + ': últimos tres años y proyección a ' + nMeses(h)});
+  gr.dibujar(h, !sinAnim);
+  const cUp = cfg.bueno ? GOOD : BAD, cDn = cfg.bueno ? BAD : GOOD;
+  $('legend').innerHTML = `<span><i style="width:18px;height:2px;background:var(--ink)"></i>Lo que ya pasó</span>` +
+    ids.map(id => `<span><i style="width:18px;height:0;border-top:3px dashed ${MODELOS[id].color}"></i>Proyección: ${MODELOS[id].label}</span>`).join('') +
+    `<span><i style="width:18px;height:10px;border-radius:2px;background:${MODELOS[ids[0]].color};opacity:.3"></i>Rango probable ${ayuda('intervalo')}</span>` +
+    `<span><i style="width:12px;height:12px;border-radius:2px;background:${cUp};opacity:.55"></i>${st.serie==='ipc' ? 'Precios más altos que hoy' : 'Más remesas que hoy'}</span>` +
+    `<span><i style="width:12px;height:12px;border-radius:2px;background:${cDn};opacity:.55"></i>${st.serie==='ipc' ? 'Precios más bajos que hoy' : 'Menos remesas que hoy'}</span>`;
+  $('chart-help').textContent = 'Cómo leer el gráfico: la línea continua muestra los últimos tres años, lo que ya pasó. La línea punteada de color es lo que el modelo calcula hacia adelante y la franja es el rango donde probablemente caerá el valor real. El área verde o naranja muestra cuánto se aleja la proyección del último dato. Pase el cursor o el dedo sobre el gráfico para ver cada mes.' + (st.comparar ? ' Con los dos modelos a la vez, la cinta de color corresponde al modelo elegido en el panel.' : '');
+
+  const vals = S.historia.valores;
+  const fin = mesLargo(fechaObj);
+  const sesgo = tieneBanda && (p.valor < p.inferior || p.valor > p.superior) ? ' El rango no rodea la línea porque en el examen la inteligencia artificial ' + (p.valor < p.inferior ? 'se quedó corta' : 'se pasó') + ' casi siempre; el rango corrige esa costumbre.' : '';
+  const rango = tieneBanda ? ' Lo más probable es que ' + (st.serie==='ipc' ? 'el valor' : 'el monto') + ' quede entre ' + fmt(p.inferior,d0) + ' y ' + fmt(p.superior,d0) + (st.serie==='ipc' ? '.' : ' millones.') + sesgo : '';
+  let r1, r2;
+  if (st.serie==='ipc'){
+    r1 = 'Según ' + mod.el + ', el índice de precios pasaría de ' + fmt(ultimo,1) + ' en ' + mesLargo(ultimoF) + ' a ' + fmt(p.valor,1) + ' en ' + fin + '. Es decir, lo que hoy cuesta 100 lempiras costaría unos ' + fmt(100*(1+varPct/100),2) + ' lempiras.' + rango;
+  } else {
+    r1 = 'Según ' + mod.el + ', las remesas pasarían de US$ ' + fmt(ultimo,0) + ' millones en ' + mesLargo(ultimoF) + ' a US$ ' + fmt(p.valor,0) + ' millones en ' + fin + ' (' + signed(varPct,1) + ' %).' + rango;
+  }
+  const aplanado = st.modelo==='xgb' && !S.variacion_xgb;
+  const ganador = resumenDM(S);
+  if (st.serie==='ipc'){
+    const n2 = vals.length, yoy = (vals[n2-1]/vals[n2-13]-1)*100;
+    r2 = 'Para tener una referencia: en el último año los precios subieron ' + fmt(yoy,1) + ' % (inflación). ' + (aplanado
+      ? 'Atención: la inteligencia artificial no puede proyectar valores más altos que los que vio al aprender, por eso su línea tiende a quedarse plana aunque los precios sigan subiendo.'
+      : (st.modelo==='sarima' ? 'El modelo estadístico prolonga esa tendencia porque los precios en Honduras cambian de forma gradual.' : '')) + (ganador ? ' ' + ganador : '');
+  } else {
+    const est = estacionalidad(S);
+    r2 = 'Las remesas tienen un patrón que se repite cada año: en promedio son más altas en ' + est.altos + ' y más bajas en ' + est.bajos + '. ' + (aplanado ? 'La inteligencia artificial no puede proyectar montos más altos que los que vio al aprender, lo que la limita cuando las remesas crecen. ' : '') + ganador;
+  }
+  $('resumen').textContent = r1;
+  $('resumen2').textContent = r2;
+  renderVerif(S,cfg);
+}
+
+function renderVerif(S,cfg){
+  const box = $('verif'), V = S.verificacion;
+  if (!V){ box.classList.add('hidden'); return; }
+  box.classList.remove('hidden');
+  const n = V.filas.length, primero = V.filas[0].mes, ultimo = V.filas[n-1].mes;
+  const filas = V.filas.map(f => {
+    const dentro = f.real >= f.inferior && f.real <= f.superior;
+    const eS = (f.sarima/f.real-1)*100, eX = (f.xgb/f.real-1)*100;
+    const cel = (v,e,nom) => `<td class="num" ${tipA(nom + ' · ' + mesSolo(f.mes), 'Proyectó ' + fmt(v,0) + ' millones y llegaron ' + fmt(f.real,0) + '. ' + (e >= 0 ? 'Se pasó ' : 'Se quedó corto ') + fmt(Math.abs(e),1) + ' %.')}>${fmt(v,0)} <span style="color:var(--muted)">(${signed(e,1)} %)</span></td>`;
+    return `<tr><td>${mesCorto(f.mes)}</td><td class="num" ${tipA('Lo que llegó en ' + mesSolo(f.mes), 'Dato real publicado por el BCH después del período de estudio.')}><b>${fmt(f.real,0)}</b></td>
+      ${cel(f.sarima,eS,MODELOS.sarima.label)}${cel(f.xgb,eX,MODELOS.xgb.label)}
+      <td ${tipA('¿Dentro del rango?', dentro ? 'El valor real cayó dentro del rango probable del modelo estadístico (' + fmt(f.inferior,0) + ' a ' + fmt(f.superior,0) + ').' : 'El valor real cayó fuera del rango probable (' + fmt(f.inferior,0) + ' a ' + fmt(f.superior,0) + ').')}><span class="check ${dentro?'si':'no'}">${dentro?'✓':'✕'}</span></td></tr>`;
+  }).join('');
+  const mejor = V.error_sarima <= V.error_xgb ? MODELOS.sarima : MODELOS.xgb;
+  box.innerHTML = `<h2>¿Acertó? Comprobación con datos reales</h2>
+    <p class="lead">Los modelos aprendieron con datos hasta diciembre de 2025. Después, el BCH publicó lo que realmente llegó de ${mesSolo(primero)} a ${mesSolo(ultimo)}. Así se ve si las proyecciones acertaron:</p>
+    <div class="callout ok" style="margin-top:12px;padding:14px 16px;font-size:14px;line-height:1.6">
+      En esos ${n} meses, <b>el modelo estadístico se equivocó en promedio ${fmt(V.error_sarima,1)} %</b> y <b>la inteligencia artificial ${fmt(V.error_xgb,1)} %</b>. ${mejor.El} estuvo más cerca de la realidad. El valor real cayó dentro del rango probable del modelo estadístico en <b>${V.dentro} de ${n}</b> meses.
+    </div>
+    <div style="overflow-x:auto;margin-top:14px"><table><thead><tr><th>Mes</th><th class="num">Lo que llegó</th><th class="num">Modelo estadístico dijo</th><th class="num">IA dijo</th><th>¿Dentro del rango?</th></tr></thead><tbody>${filas}</tbody></table></div>
+    <p class="chart-help" style="font-size:12px;color:var(--muted)">Millones de US$. Entre paréntesis, cuánto se pasó (+) o se quedó corto (−) cada modelo.</p>`;
+}
+
+function resumenDM(S){
+  const dm = S.diebold_mariano;
+  if (!dm || !dm.length) return '';
+  const s = nDM(S,'sarima'), x = nDM(S,'xgb');
+  if (s===dm.length) return 'En la evaluación, el modelo estadístico acertó más que la inteligencia artificial en todos los plazos, y la diferencia no es casualidad.';
+  if (x===dm.length) return 'En la evaluación, la inteligencia artificial acertó más que el modelo estadístico en todos los plazos, y la diferencia no es casualidad.';
+  const partes = [];
+  if (s) partes.push('el modelo estadístico acertó claramente más en ' + s + ' de ' + dm.length + ' plazos');
+  if (x) partes.push('la inteligencia artificial en ' + x);
+  const n = dm.length - s - x;
+  return 'En la evaluación, ' + partes.join(' y ') + (n ? '; en ' + (n===1 ? 'el otro' : 'los otros ' + n) + ' no se puede asegurar cuál es mejor.' : '.');
+}
+
+// ---------------------------------------------------------------------------
+// 2 · ¿Por qué este valor?
+// ---------------------------------------------------------------------------
+const LLANO_SARIMA = {
+  'Constante de la ecuación': ['Crecimiento normal', 'Lo que la serie suele crecer cada mes', 'El crecimiento de fondo que la serie ha tenido en promedio cada mes.'],
+  'Ajuste por tendencia reciente': ['Impulso de los últimos meses', 'Si venía subiendo rápido o lento', 'Cuánto empuja la proyección el ritmo con que venían subiendo los últimos meses.'],
+  'Ajuste estacional': ['Época del año', 'Lo que suele pasar en este mes, según años anteriores', 'Cuánto aporta lo que suele pasar en este mes del año, según años anteriores.'],
+  'Corrección por error estacional': ['Corrección por sorpresas del año pasado', 'Ajusta lo que el modelo no anticipó hace un año', 'El modelo se corrige a sí mismo por lo que no anticipó en este mismo mes el año pasado.'],
+  'Corrección por error reciente': ['Corrección por sorpresas recientes', 'Ajusta lo que no anticipó el mes pasado', 'El modelo se corrige por lo que no anticipó el mes pasado.'],
+  'Corrección por errores pasados': ['Corrección por sorpresas pasadas', 'Ajusta lo que el modelo no anticipó antes', 'El modelo se corrige por errores de meses anteriores.']
+};
+function explicaXGB(nombre){
+  if (/último mes/i.test(nombre)) return 'El dato más reciente publicado. Suele pesar mucho porque los precios y las remesas cambian poco de un mes a otro.';
+  if (/hace \d+ mes/i.test(nombre)) return 'Lo que valía la serie en ese momento. Ayuda a ver hacia dónde iba la tendencia.';
+  if (/Promedio/i.test(nombre)) return 'El promedio de ese período. Suaviza los saltos de un solo mes.';
+  if (/Mes del año|Época/i.test(nombre)) return 'El mes que se proyecta. Recoge lo que suele pasar en esa época del año.';
+  if (/Otras/i.test(nombre)) return 'La suma de varias variables que pesan poco cada una.';
+  return 'Dato que usó el modelo para calcular la proyección.';
+}
+
+function renderExp(S,cfg){
+  const E = S.explicacion[st.modelo], esX = st.modelo==='xgb';
+  const mod = MODELOS[st.modelo];
+  $('exp-title').innerHTML = '¿De dónde sale la proyección ' + mod.de + '?' + (esX ? ' ' + ayuda('shap') : ' ' + ayuda('sarima'));
+  const badge = $('exp-badge');
+  badge.textContent = esX ? 'Método: valores SHAP' : 'Método: desglose de la fórmula';
+  badge.className = 'tpill ' + (esX ? 'ml' : 'ac');
+  if (!E){
+    $('exp-sub').textContent = 'La especificación de este SARIMA no admite el desglose automático.';
+    $('exp-rows').replaceChildren(); return;
+  }
+  const fl = mesLargo(S.fechas_proyeccion[0]);
+  $('exp-sub').textContent = esX
+    ? 'Se explica la proyección de ' + fl + '. La inteligencia artificial no muestra su razonamiento, así que se usa un método especial (SHAP) para ver cuánto pesó cada dato en su respuesta, como el desglose de una factura.'
+    : 'Se explica la proyección de ' + fl + '. El modelo estadístico es una fórmula, así que se puede separar en partes y ver cuánto aporta cada una, como el desglose de una factura.';
+  const sm = E.terminos.reduce((a,t) => a+t.valor, 0);
+  const d = cfg.dec;
+  $('exp-base-l').textContent = 'Punto de partida';
+  $('exp-base').textContent = fmt(E.base,d);
+  $('exp-base-e').textContent = esX
+    ? (S.variacion_xgb ? 'El último dato más el cambio que la serie suele tener' : 'El promedio de todos los valores que el modelo vio al aprender, desde el año 2000')
+    : 'El último dato publicado (' + mesSolo(S.historia.fechas[S.historia.fechas.length-1]) + ')';
+  $('exp-sum-l').textContent = 'Lo que suman o restan los datos';
+  $('exp-sum').textContent = signed(sm,d);
+  $('exp-pred-l').textContent = 'Proyección · ' + E.fecha;
+  $('exp-pred').textContent = fmt(E.proyeccion,d);
+  const setTip = (id, t, x) => { const e = $(id).querySelector('.v'); e.setAttribute('tabindex','0'); e.dataset.tt = t; e.dataset.tx = x; };
+  setTip('bx-base', 'Punto de partida', esX ? 'Es el nivel medio que la inteligencia artificial aprendió. Está lejos del nivel actual, por eso los datos recientes deben "subirla" hasta la proyección.' : 'Es el último dato real. La fórmula parte de aquí y le suma o resta ajustes.');
+  setTip('bx-sum', 'Suma de las barras', 'Es el total de todas las barras de abajo: lo que los datos y las reglas del modelo agregan (o quitan) al punto de partida.');
+  setTip('bx-pred', 'Proyección', 'Punto de partida más la suma de las barras. Es el mismo valor que aparece en la pestaña 1.');
+  const maxAbs = Math.max(...E.terminos.map(t => Math.abs(t.valor))) || 1;
+  $('exp-rows').replaceChildren(...E.terminos.map(t => {
+    let nom = t.nombre, desc = t.descripcion, tecnico = '', largo;
+    if (!esX && LLANO_SARIMA[t.nombre]){ [nom, desc, largo] = LLANO_SARIMA[t.nombre]; tecnico = t.descripcion; }
+    if (!esX && t.nombre.startsWith('Cambio de')){ nom = 'Lo que pasó este mismo mes el año pasado'; tecnico = t.descripcion; desc = 'Cuánto cambió la serie en ' + MES_LARGO[parseMes(S.fechas_proyeccion[0]).m] + ' del año anterior'; largo = 'Lo que cambió la serie en este mismo mes el año pasado; el modelo supone que algo parecido se repite.'; }
+    if (esX && nom === 'Mes del año') nom = 'Época del año';
+    if (esX) largo = explicaXGB(t.nombre);
+    const w = (Math.abs(t.valor)/maxAbs*46).toFixed(1) + '%';
+    const bar = t.valor >= 0 ? `left:50%;width:${w};background:${ML}` : `right:50%;width:${w};background:${ACCENT}`;
+    const verbo = Math.abs(t.valor) < Math.pow(10,-d)/2 ? 'casi no cambia la proyección' : (t.valor > 0 ? 'sube' : 'baja') + ' la proyección en ' + fmt(Math.abs(t.valor),d);
+    const fila = el('div',{className:'frow'},
+      `<div class="fname"><div class="a">${esc(nom)}</div><div class="b">${esc(desc)}${tecnico ? ' · <span title="Término técnico">' + esc(tecnico) + '</span>' : ''}</div></div>` +
+      `<div class="ftrack"><div class="mid"></div><div class="bar" style="${bar}"></div></div>` +
+      `<div class="fval" ${tipA(nom, (largo || '') + ' En esta proyección ' + verbo + '.')}>${signed(t.valor,d)}</div>`);
+    fila.setAttribute('aria-label', nom + ': ' + verbo);
+    return fila;
+  }));
+
+  const reales = E.terminos.filter(t => t.nombre !== 'Otras variables');
+  const orden = reales.slice().sort((a,b) => b.valor-a.valor);
+  const top = orden[0], bot = orden[orden.length-1];
+  const llano = t => { if (!t) return ''; if (!esX && LLANO_SARIMA[t.nombre]) return LLANO_SARIMA[t.nombre][0].toLowerCase(); if (!esX && t.nombre.startsWith('Cambio de')) return 'lo que pasó este mismo mes el año pasado'; return (t.nombre==='Mes del año'?'época del año':t.nombre).toLowerCase(); };
+  let texto;
+  if (esX){
+    texto = 'La inteligencia artificial arranca en ' + fmt(E.base,d) + ', ' + (S.variacion_xgb ? 'el último dato más el cambio habitual' : 'el promedio de todo lo que vio al aprender') + ', y llega a ' + fmt(E.proyeccion,d) + '. ';
+    if (top && top.valor > 0) texto += 'Lo que más empuja hacia arriba es «' + llano(top) + '» (' + signed(top.valor,d) + '). ';
+    if (bot && bot.valor < 0) texto += 'Lo que más frena es «' + llano(bot) + '» (' + signed(bot.valor,d) + '). ';
+    if (!S.variacion_xgb) texto += 'Como su punto de partida es un promedio de muchos años, muy por debajo del nivel actual, casi todo el trabajo lo hacen los valores de los meses más recientes: en la práctica, el modelo se guía sobre todo por el último dato.';
+  } else {
+    texto = 'El modelo estadístico arranca en el último dato publicado (' + fmt(E.base,d) + ') y le hace ' + (E.terminos.length===1 ? 'un ajuste' : E.terminos.length + ' ajustes') + ' que en total ' + (sm>=0?'suman ':'restan ') + fmt(Math.abs(sm),d) + '. ';
+    const relevante = t => t && Math.abs(t.valor) >= 0.1 * maxAbs;
+    const sube = top && top.valor > 0 && relevante(top), baja = bot && bot.valor < 0 && relevante(bot);
+    if (sube) texto += 'Lo que más sube la proyección es «' + llano(top) + '» (' + signed(top.valor,d) + ')';
+    if (baja) texto += (sube ? ' y lo que más la baja es «' : 'Lo que más la baja es «') + llano(bot) + '» (' + signed(bot.valor,d) + ')';
+    texto += (sube || baja ? '. ' : '') + 'Resultado: ' + fmt(E.proyeccion,d) + '. Como es una fórmula conocida, este desglose es exacto.';
+    if (S.logaritmo) texto += ' En remesas la fórmula trabaja en porcentajes; aquí se tradujeron a millones de dólares.';
+  }
+  $('exp-texto').textContent = texto;
+}
+
+// ---------------------------------------------------------------------------
+// 3 · ¿Qué tan bueno es?
+// ---------------------------------------------------------------------------
+function renderDes(S,cfg){
+  const h = st.h;
+  const D = S.desempeno[String(h)];
+  $('ver-title').innerHTML = '¿Quién adivina mejor? · ' + cfg.largo + ' a ' + nMeses(h);
+  if (!D){
+    $('ver-big').textContent = 'Todavía no hay resultados del examen para este plazo.';
+    $('ver-bars').replaceChildren(); $('dm-body').replaceChildren(); $('des-body').replaceChildren(); return;
+  }
+  const modelos = [['sarima',MODELOS.sarima.label,ACCENT],['xgb',MODELOS.xgb.label,ML],['ingenuo','Modelo ingenuo',NAIVE]].filter(m => D[m[0]]);
+  const maxE = Math.max(...modelos.map(m => D[m[0]].MAPE));
+  const ganador = modelos.slice(0,2).sort((a,b) => D[a[0]].MAPE - D[b[0]].MAPE)[0];
+  const otro = ganador[0]==='sarima' ? ['xgb',MODELOS.xgb.el] : ['sarima',MODELOS.sarima.el];
+  const veces = D[otro[0]].MAPE / D[ganador[0]].MAPE;
+  const dmH = S.diebold_mariano.find(x => parseInt(x.horizonte) === h);
+  const seguro = dmH && dmH.valor_p < 0.05;
+  $('ver-big').innerHTML = 'Proyectando ' + nMeses(h) + ' adelante, <span style="color:' + ganador[2] + '">' + MODELOS[ganador[0]].el + '</span> se equivoca menos: en promedio ' + fmt(D[ganador[0]].MAPE,1) + ' %, frente a ' + fmt(D[otro[0]].MAPE,1) + ' % ' + MODELOS[otro[0]].de + (veces >= 1.5 ? ' (falla ' + fmt(veces,1) + ' veces más)' : '') + '. ' +
+    (seguro ? 'La prueba estadística confirma que la diferencia es real.' : 'Pero la prueba estadística no puede asegurar que la diferencia no sea casualidad.');
+  $('ver-bars').replaceChildren(...[el('div',{className:'note',style:'margin:0 0 4px'}, 'Error promedio de cada modelo ' + ayuda('error') + ' · menos es mejor')]
+    .concat(modelos.map(([k,n,c]) => el('div',{className:'ebar'},
+      `<div class="lab"><span class="dot" style="background:${c}"></span>${n}${k==='ingenuo' ? ' ' + ayuda('ingenuo') : ''}</div>` +
+      `<div class="trk"><div class="fill" style="width:${(D[k].MAPE/maxE*100).toFixed(1)}%;background:${c};opacity:${k==='ingenuo'?0.5:0.9}"></div></div>` +
+      `<div class="val" ${tipA(n, 'En el examen se equivocó en promedio ' + fmt(D[k].MAPE,1) + ' %: por cada 100 del valor real, se desvió unos ' + fmt(D[k].MAPE,1) + '. Menos es mejor.')}>se equivoca <b>${fmt(D[k].MAPE,1)} %</b></div>`))));
+  const ing = D.ingenuo ? D.ingenuo.MAPE : null;
+  let nota = '';
+  if (ing){
+    const ganan = [['sarima',MODELOS.sarima.El],['xgb',MODELOS.xgb.El]].filter(([k]) => D[k] && D[k].MAPE < ing).map(m => m[1]);
+    nota = 'El modelo ingenuo, que solo repite el valor del mismo mes del año pasado, se equivoca ' + fmt(ing,1) + ' %. ';
+    if (ganan.length === 2) nota += 'Los dos modelos le ganan, así que ambos aportan algo; la pregunta es cuál aporta más.';
+    else if (ganan.length === 1) nota += 'Solo ' + ganan[0].toLowerCase() + ' le gana a ese método tan simple; a este plazo el otro modelo no aporta.';
+    else nota += 'A este plazo ninguno de los dos modelos le gana a ese método tan simple.';
+  }
+  $('ver-note').textContent = nota;
+
+  const dm = S.diebold_mariano;
+  $('dm-body').replaceChildren(...dm.map(x => {
+    const sig = x.valor_p < 0.05;
+    const quien = x.favorecido==='sarima' ? MODELOS.sarima.El : (x.favorecido==='xgb' ? MODELOS.xgb.El : (x.estadistico < 0 ? MODELOS.sarima.El : MODELOS.xgb.El));
+    const [t,s] = sig
+      ? [quien + ' es mejor, y no es casualidad', x.favorecido==='xgb' ? 'ml' : 'ac']
+      : [quien + ' falla menos, pero no se puede asegurar', 'ne'];
+    const tr = el('tr',{}, `<td>${esc(x.horizonte)}</td><td><span class="tpill ${s}" ${tipA('Resultado de la prueba', sig ? 'La diferencia entre los dos modelos es lo bastante grande para que no sea producto de la suerte (valor p menor que 0.05).' : 'La diferencia es pequeña frente a la variación normal de los errores: podría ser casualidad (valor p mayor que 0.05).')}>${t}</span></td>` +
+      `<td class="num" ${tipA('Estadístico', 'Mide qué tan clara es la diferencia. Negativo: el modelo estadístico se equivocó menos. Positivo: la inteligencia artificial. Lejos de cero: diferencia más clara.')}>${signed(x.estadistico,2)}</td>` +
+      `<td class="num" ${tipA('Valor p', 'Probabilidad de ver una diferencia así solo por casualidad. Menos de 0.05 se considera diferencia real. Aquí vale ' + fmt(x.valor_p,3) + '.')}>${fmt(x.valor_p,3)}</td>`);
+    if (parseInt(x.horizonte) === h) tr.className = 'hl-row';
+    return tr;
+  }));
+
+  let sub = 'Validación de origen móvil, proyectando ' + nMeses(h) + ' adelante. Un valor menor indica mejor desempeño.';
+  if (D.ingenuo && D.ingenuo.MASE > 1.05) sub += ' El MASE usa como escala el error del ingenuo en los años de entrenamiento; como la serie creció después, el propio ingenuo queda por encima de 1 y la comparación útil es entre filas.';
+  else sub += ' MASE menor que 1 supera al modelo ingenuo.';
+  $('des-sub').textContent = sub;
+  const filas = [['ingenuo','Modelo ingenuo'],['sarima','Modelo estadístico · ' + S.especificacion_arima],['xgb','Inteligencia artificial · XGBoost' + (S.variacion_xgb ? ' (sobre variaciones)' : '')]];
+  const dec = st.serie==='ipc' ? 3 : 1;
+  const mejor = ['sarima','xgb','ingenuo'].filter(k => D[k]).sort((a,b) => D[a].MASE-D[b].MASE)[0];
+  const info = {MAE:'Error absoluto medio: cuánto se equivoca en promedio, en las unidades de la serie.', RMSE:'Como el MAE pero castiga más los errores grandes.', MAPE:'Error promedio en porcentaje.', MASE:'Error comparado con el del modelo ingenuo; menor que 1 lo supera.'};
+  $('des-body').replaceChildren(...filas.map(([k,n]) => {
+    const r = D[k];
+    const c = (m,v,dd) => `<td class="num${k===mejor?' best':''}" ${tipA(m + ' · ' + n.split(' · ')[0], info[m] + ' Valor: ' + fmt(v,dd) + '.')}>${fmt(v,dd)}</td>`;
+    return el('tr',{}, `<td${k===mejor?' class="best"':''}>${esc(n)}</td>` + (r ? c('MAE',r.MAE,dec) + c('RMSE',r.RMSE,dec) + c('MAPE',r.MAPE,2) + c('MASE',r.MASE,3) : '<td colspan="4">—</td>'));
+  }));
+}
+
+function descargarCSV(){
+  const S = DATOS.series[st.serie];
+  const filas = [['mes','modelo_estadistico','estadistico_inferior_95','estadistico_superior_95','inteligencia_artificial','ia_inferior_95','ia_superior_95']];
+  S.fechas_proyeccion.forEach((f,i) => {
+    const a = S.proyecciones.sarima[i], x = S.proyecciones.xgb[i];
+    const r = v => v === null ? '' : v.toFixed(4);
+    filas.push([f, r(a.valor), r(a.inferior), r(a.superior), r(x.valor), r(x.inferior), r(x.superior)]);
+  });
+  const blob = new Blob(['﻿' + filas.map(r => r.join(',')).join('\n')], {type:'text/csv;charset=utf-8'});
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'proyeccion_' + (st.serie==='ipc' ? 'ipc' : 'remesas') + '.csv';
+  document.body.appendChild(a); a.click(); a.remove();
+}
+$('btn-csv').onclick = descargarCSV;
+
+// ---------------------------------------------------------------------------
+// Referencia externa (no forma parte del experimento). Se puede poner en null.
+// ---------------------------------------------------------------------------
+const EXTERNO = {
+  mes: '2026-06', yoy: 5.83,
+  fuente: 'Infobae, 21 de julio de 2026',
+  url: 'https://www.infobae.com/honduras/2026/07/21/banco-central-de-honduras-fortalece-su-politica-monetaria-para-frenar-la-inflacion-y-fortalecer-la-economia/'
+};
+const FUENTES = {
+  eyn: 'https://www.revistaeyn.com/finanzas/remesas-a-honduras-en-2025-totalizaron-us-12212-millones-un-253-mas-GH28942242',
+  bch: 'https://www.bch.hn'
+};
+const num = (texto, titulo, explicacion) => `<b ${tipA(titulo, explicacion)}>${texto}</b>`;
+
+// ---------------------------------------------------------------------------
+// Recomendaciones
+// ---------------------------------------------------------------------------
+function accionesPerfil(perfil, c){
+  const I = DATOS.series.ipc, R = DATOS.series.rem;
+  const inf = num(fmt(c.infl,1) + ' %', 'Inflación esperada', 'Proyección del modelo estadístico para ' + mesSolo(c.fin) + ' frente al último dato real (' + mesSolo(c.ipcF) + ').');
+  const rangoInf = c.inflLo === null ? '' : 'El rango probable va de ' + num(fmt(c.inflLo,1) + ' %', 'Extremo bajo del rango', 'Si los precios suben menos de lo previsto, la inflación podría quedar cerca de este valor.') + ' a ' + num(fmt(c.inflHi,1) + ' %', 'Extremo alto del rango', 'Si los precios suben más de lo previsto, la inflación podría llegar a este valor.') + '. ';
+  const equiv = 1/(1 + c.infl/100);
+  const A = [];
+  if (perfil === 'hogar'){
+    A.push({t:'Cuente con que los precios suban cerca de ' + fmt(c.infl,1) + ' % en 12 meses', cuando:'Ahora', d:rangoInf + 'Si sus ingresos suben menos que eso, su dinero rinde menos. Compruebe cuánto cambia con su propio monto en la calculadora.', ir:'calc', irTxt:'Abrir la calculadora'});
+    A.push({t:'Revise los gastos que suben junto con los precios', cuando:'Próximas semanas', d:'Alquiler, transporte, alimentos y colegiaturas suelen ajustarse con la inflación. Haga una lista y súmele ' + inf + ' para tener un presupuesto realista del próximo año.'});
+    A.push({t:'No deje el ahorro parado sin saber cuánto pierde', cuando:'Este trimestre', d:'Con esa inflación, cada L 1,000 guardados sin rendimiento comprarán en 12 meses lo que hoy cuestan unos ' + num('L ' + fmt(1000*equiv,0), 'Poder de compra de L 1,000', 'L 1,000 divididos entre (1 + inflación esperada). Es lo que compraría ese dinero dentro de 12 meses, medido en precios de hoy.') + '. Compare lo que le paga su cuenta o cooperativa con esa cifra.'});
+    A.push({t:'Para una compra grande, compare antes de decidir', cuando:'Cuando la necesite', d: c.infl > 5 ? 'Con inflación alta, esperar tiene un costo: si ya decidió comprar algo necesario, conviene no postergarlo demasiado. Compare precios en varias tiendas.' : 'Con una inflación moderada, esperar unos meses para encontrar el mejor precio cuesta poco. Compare en varias tiendas y evite comprar por prisa.'});
+  }
+  if (perfil === 'remesas'){
+    A.push({t:'Planifique con el promedio del año, no con el mejor mes', cuando:'Cada mes', d:'En el país, las remesas suelen ser más altas en ' + num(c.est.altos, 'Meses con más envíos', 'Promedio histórico desde el año 2000 de cuánto se desvía cada mes frente a su año.') + ' y más bajas en ' + num(c.est.bajos, 'Meses con menos envíos', 'Promedio histórico desde el año 2000.') + '. Si sus envíos siguen ese patrón, guarde una parte en los meses altos para cubrir los bajos.'});
+    A.push({t:'Arme un colchón para los meses flojos', cuando:'Este año', d:'Un fondo de emergencia de varios meses de gastos protege a la familia si un envío se retrasa o baja. La proyección es nacional: no predice lo que enviará una persona en particular.'});
+    A.push({t:'Cuide el poder de compra de cada dólar', cuando:'Ahora', d:'Si los precios suben ' + inf + ', US$ 100 comprarán en 12 meses lo que hoy cuestan unos ' + num('US$ ' + fmt(100*equiv,0), 'Poder de compra de US$ 100', 'US$ 100 divididos entre (1 + inflación esperada), suponiendo que el tipo de cambio no cambie.') + ' (si el tipo de cambio se mantiene). Conviene ajustar el presupuesto familiar en esa proporción.', ir:'calc', irTxt:'Calcular con mis montos'});
+    A.push({t:'Compare cuánto cuesta enviar y recibir el dinero', cuando:'Antes del próximo envío', d:'Las comisiones y el tipo de cambio varían entre servicios. Pida a quien envía que compare cuántos lempiras se reciben por la misma cantidad de dólares en cada opción.'});
+  }
+  if (perfil === 'negocio'){
+    A.push({t:'Revise sus precios y contratos frente a una inflación de ' + fmt(c.infl,1) + ' %', cuando:'Ahora', d:'Si sus costos suben cerca de ' + inf + ' y sus precios no, su margen se reduce. En contratos de varios meses considere una cláusula de ajuste por inflación.', ir:'calc', irTxt:'Abrir la calculadora'});
+    A.push({t:'Prepare los meses de mayor movimiento: ' + c.est.altos, cuando:'Antes de esos meses', d:'En esos meses llegan más remesas al país, y los hogares que las reciben suelen tener más dinero para gastar. Revise inventario y personal con tiempo. Es una pauta histórica, no una garantía.'});
+    const m = c.rem12m, mesF = mesSolo(DATOS.series.rem.fechas_proyeccion[11]);
+    A.push({t:'Planifique con tres escenarios, no con una sola cifra', cuando:'Al preparar el presupuesto', d:'Las remesas de ' + mesF + ' (millones de US$) podrían estar en el rango siguiente. Use el valor bajo para ser prudente y el alto para saber cuánto podría crecer la demanda.',
+      extra: m.inferior === null ? '' : `<div class="scen"><div ${tipA('Escenario bajo', 'Extremo bajo del rango probable del 95 %. Hay poca probabilidad de que llegue menos.')}><div class="k">Bajo</div><div class="v">${fmt(m.inferior,0)}</div></div><div ${tipA('Escenario central', 'Proyección del modelo estadístico: el valor más probable.')}><div class="k">Central</div><div class="v">${fmt(m.valor,0)}</div></div><div ${tipA('Escenario alto', 'Extremo alto del rango probable del 95 %. Hay poca probabilidad de que llegue más.')}><div class="k">Alto</div><div class="v">${fmt(m.superior,0)}</div></div></div>`});
+    A.push({t:'Negocie con sus proveedores', cuando:'Este trimestre', d: c.infl >= 4 ? 'Con una inflación esperada de ' + inf + ', vale la pena pedir precios fijos por 3 a 6 meses a sus proveedores principales.' : 'Con una inflación esperada moderada hay menos urgencia, pero conviene comparar proveedores cada trimestre.'});
+    A.push({t:'Compare cada mes lo real con lo proyectado', cuando:'Cada mes', d:'Anote el valor publicado y mírelo frente al rango probable. Si se sale del rango, revise sus supuestos antes de tomar decisiones grandes.', ir:'proy', irTxt:'Ver la proyección'});
+  }
+  if (perfil === 'inst'){
+    const nI = nDM(I,'sarima'), nR = nDM(R,'sarima'), tot = (I.diebold_mariano||[]).length + (R.diebold_mariano||[]).length, xg = nDM(I,'xgb') + nDM(R,'xgb');
+    A.push({t:'Use el modelo estadístico como referencia principal', cuando:'Siempre', d:'En el examen ganó con una diferencia real en ' + num((nI+nR) + ' de ' + tot, 'Pruebas ganadas', 'Comparaciones (2 series × 4 plazos) donde la prueba de Diebold y Mariano encontró una ventaja real del modelo estadístico.') + ' comparaciones' + (xg === 0 ? ', y la inteligencia artificial no ganó en ninguna' : '') + '. La inteligencia artificial sirve como segunda opinión, sobre todo a 1 y 3 meses.', ir:'proy', irTxt:'Ver el desempeño'});
+    const m = c.rem12m;
+    if (m.inferior !== null){
+      const pct = (m.superior - m.inferior)/2/m.valor*100;
+      A.push({t:'Comunique rangos, no cifras exactas', cuando:'Al publicar', d:'A 12 meses el rango probable de las remesas va de US$ ' + fmt(m.inferior,0) + ' a ' + fmt(m.superior,0) + ' millones, cerca de ' + num('±' + fmt(pct,0) + ' %', 'Amplitud del rango', 'La mitad del ancho del rango dividida entre la proyección central de ' + mesSolo(DATOS.series.rem.fechas_proyeccion[11]) + '.') + ' alrededor de la proyección. Presentar solo el punto central da una falsa sensación de precisión.'});
+    }
+    A.push({t:'Vigile el sesgo reciente', cuando:'Cada mes', d: c.sesgoRem === undefined
+      ? 'Compare cada mes el dato publicado con la proyección. Si el error tiene siempre el mismo signo, el modelo está sesgado y conviene reestimarlo.'
+      : 'En los ' + c.nVer + ' meses ya publicados (' + mesCorto(c.verIni) + ' a ' + mesCorto(c.verFin) + '), el modelo estadístico proyectó en promedio ' + num(fmt(Math.abs(c.sesgoRem),1) + ' % ' + (c.sesgoRem > 0 ? 'más' : 'menos'), 'Sesgo en remesas', 'Suma de lo proyectado dividida entre la suma de lo que llegó, menos 1. Positivo: el modelo se pasó. Negativo: se quedó corto.') + ' de lo que llegó. Si la diferencia persiste, conviene reestimarlo o corregir el nivel.'});
+    A.push({t:'Actualice con cada dato nuevo', cuando:'Cada mes', d:'Agregue el dato publicado y vuelva a ejecutar el proceso de actualización: las proyecciones, las pruebas y esta pantalla se recalculan con la serie completa.'});
+    A.push({t:'Tenga presentes los choques que el modelo no ve', cuando:'Siempre', d:'Ningún modelo anticipa por sí solo cambios bruscos en los precios de los combustibles, en el empleo de los migrantes en Estados Unidos o en decisiones de política económica. Use las proyecciones junto con el criterio experto.'});
+  }
+  return A;
+}
+
+function renderRec(){
+  const c = cifras(), I = DATOS.series.ipc, R = DATOS.series.rem;
+  const sI = claseInfl(c.infl);
+  const estI = sI === 'good' ? ['Dentro del rango meta', 'good'] : (sI === 'bad' ? ['Por encima del rango meta', 'bad'] : ['Por debajo del rango meta', '']);
+  const estR = c.remChg >= 10 ? ['Crecimiento fuerte', 'good'] : (c.remChg >= 0 ? ['Crecimiento moderado', 'good'] : (c.remChg >= -5 ? ['Estable o a la baja', 'mid'] : ['Baja', 'bad']));
+  const rango = c.inflLo === null ? '' : ' Rango probable: de ' + fmt(c.inflLo,1) + ' % a ' + fmt(c.inflHi,1) + ' %.';
+  const perfiles = [['hogar','Soy un hogar'],['remesas','Mi familia recibe remesas'],['negocio','Tengo un negocio'],['inst','Soy analista o institución']];
+  const A = accionesPerfil(st.perfil, c);
+
+  // Confiabilidad
+  const D12i = I.desempeno['12'], D12r = R.desempeno['12'];
+  const pts = [];
+  if (D12i && D12r) pts.push('A 12 meses, el modelo estadístico se equivocó en promedio ' + fmt(D12i.sarima.MAPE,1) + ' % en precios y ' + fmt(D12r.sarima.MAPE,1) + ' % en remesas. A 1 mes, el error es mucho menor: fíese más de las fechas cercanas.');
+  if (R.verificacion) pts.push('Con las remesas reales de ' + mesSolo(R.verificacion.filas[0].mes) + ' a ' + mesSolo(R.verificacion.filas[R.verificacion.filas.length-1].mes) + ', el modelo estadístico se equivocó en promedio ' + fmt(R.verificacion.error_sarima,1) + ' % y el valor real cayó dentro del rango probable en ' + R.verificacion.dentro + ' de ' + R.verificacion.filas.length + ' meses.');
+  if (EXTERNO){
+    const i6 = I.fechas_proyeccion.indexOf(EXTERNO.mes), j = I.historia.fechas.indexOf(EXTERNO.mes.replace(/^2026/, '2025'));
+    if (i6 >= 0 && j >= 0){
+      const p = I.proyecciones.sarima[i6], base = I.historia.valores[j];
+      const yp = (p.valor/base-1)*100, yl = p.inferior === null ? null : (p.inferior/base-1)*100, yh = p.superior === null ? null : (p.superior/base-1)*100;
+      const fuera = yh !== null && EXTERNO.yoy > yh;
+      pts.push('Como referencia externa (no forma parte del experimento), <a href="' + EXTERNO.url + '" target="_blank" rel="noopener">' + esc(EXTERNO.fuente) + '</a> reportó una inflación de ' + fmt(EXTERNO.yoy,2) + ' % en ' + mesSolo(EXTERNO.mes) + '. La proyección sugería cerca de ' + fmt(yp,1) + ' %' + (yl !== null ? ' (rango de ' + fmt(yl,1) + ' % a ' + fmt(yh,1) + ' %)' : '') + (fuera ? ': los precios subieron más de lo previsto y quedaron fuera del rango. Los modelos no anticipan choques inesperados.' : '.'));
+    }
+  }
+
+  $('page-rec').innerHTML = `
+  <div class="pagehead"><div class="wrap in">
+    <h1 class="sec-t">Qué hacer con estas proyecciones</h1>
+    <p class="sec-s">Acciones sugeridas a partir de los números de esta herramienta. Elija quién es usted y verá recomendaciones adaptadas.</p>
+    <div class="chips" role="group" aria-label="Perfil">${perfiles.map(([k,l]) => `<button type="button" class="chip" data-perfil="${k}" aria-pressed="${st.perfil===k}">${l}</button>`).join('')}</div>
+  </div></div>
+  <section class="band wrap" style="padding-bottom:10px">
+    <h2 class="sec-t" style="font-size:22px">El panorama de los próximos 12 meses</h2>
+    <div class="pan2" style="margin-top:16px">
+      <div class="pan ${estI[1]}"><span class="st">${estI[0]}</span>
+        <div class="big" ${tipA('Inflación esperada a 12 meses', 'Proyección del modelo estadístico para ' + mesSolo(c.fin) + ' frente al último dato real. El rango meta del BCH es de 3 % a 5 %.')}>${fmt(c.infl,1)} %</div>
+        <p><b>Precios.</b> Se espera que el costo de la vida suba ese porcentaje hasta ${mesSolo(c.fin)}.${rango} En los últimos 12 meses subió ${fmt(c.yoy,1)} %.</p></div>
+      <div class="pan ${estR[1]}"><span class="st">${estR[0]}</span>
+        <div class="big" ${tipA('Remesas esperadas', 'Suma de las proyecciones mensuales del modelo estadístico de ' + mesCorto(R.fechas_proyeccion[0]) + ' a ' + mesCorto(R.fechas_proyeccion[11]) + ', en millones de dólares.')}>US$ ${fmt(c.remProy,0)} M</div>
+        <p><b>Remesas.</b> ${signed(c.remChg,1)} % frente a los 12 meses anteriores (US$ ${fmt(c.rem12,0)} millones). Los meses con más envíos suelen ser ${c.est.altos}.</p></div>
+    </div>
+  </section>
+  <section class="band wrap" style="padding-top:10px;padding-bottom:10px">
+    <h2 class="sec-t" style="font-size:22px">${{hogar:'Qué puede hacer un hogar', remesas:'Qué puede hacer una familia que recibe remesas', negocio:'Qué puede hacer un negocio', inst:'Qué puede hacer una institución o un analista'}[st.perfil]}</h2>
+    <div class="acts">${A.map(a => `<div class="act"><span class="when">${a.cuando}</span><h3>${a.t}</h3><p>${a.d}</p>${a.extra || ''}${a.ir ? `<button type="button" class="go" data-ir="${a.ir}">${a.irTxt}</button>` : ''}</div>`).join('')}</div>
+  </section>
+  <section class="band wrap" style="padding-top:10px">
+    <div class="panel">
+      <h3>Qué tan confiable es esta guía</h3>
+      <ul style="margin:10px 0 0;padding-left:20px;font-size:14px;line-height:1.75;color:var(--ink-2)">${pts.map(p => '<li>' + p + '</li>').join('')}</ul>
+      <p class="callout warn" style="margin:16px 0 0;font-size:13px;line-height:1.6">Estas recomendaciones son orientación general basada en proyecciones estadísticas. No son asesoría financiera, legal ni de inversión, y no sustituyen las publicaciones oficiales del Banco Central de Honduras.</p>
+    </div>
+  </section>`;
+  $('page-rec').querySelectorAll('[data-perfil]').forEach(b => b.onclick = () => { st.perfil = b.dataset.perfil; renderRec(); setTimeout(ajustarMarco, 60); });
+}
+
+// ---------------------------------------------------------------------------
+// Calculadora de inflación
+// ---------------------------------------------------------------------------
+let calcMontada = false;
+const pad2 = n => String(n).padStart(2,'0');
+function serieIPC(){
+  const I = DATOS.series.ipc, ps = I.proyecciones.sarima;
+  return {
+    f: I.historia.fechas.concat(I.fechas_proyeccion),
+    v: I.historia.valores.concat(ps.map(p => p.valor)),
+    lo: I.historia.valores.map(() => null).concat(ps.map(p => p.inferior)),
+    hi: I.historia.valores.map(() => null).concat(ps.map(p => p.superior)),
+    real: I.historia.fechas.length
+  };
+}
+const calc = {tipo:'ahorro', monto:10000, a:'2015-12', b:'2025-12'};
+const TIPOS = {ahorro:'Dinero guardado o ahorros', salario:'Un salario o ingreso', precio:'Un precio o un alquiler'};
+
+function montarCalc(){
+  const T = serieIPC();
+  const anios = []; for (let y = parseMes(T.f[0]).y; y <= parseMes(T.f[T.f.length-1]).y; y++) anios.push(y);
+  const selFecha = (id, valor) => {
+    const {y,m} = parseMes(valor);
+    return `<div class="row2"><select id="${id}-m" aria-label="Mes">${MES_LARGO.map((n,i) => `<option value="${i}"${i===m?' selected':''}>${may(n)}</option>`).join('')}</select><select id="${id}-y" aria-label="Año">${anios.map(a => `<option value="${a}"${a===y?' selected':''}>${a}</option>`).reverse().join('')}</select></div>`;
+  };
+  $('page-calc').innerHTML = `
+  <div class="pagehead"><div class="wrap in">
+    <h1 class="sec-t">Calculadora de inflación</h1>
+    <p class="sec-s">Descubra cuánto vale hoy un monto de otra fecha, o cuánto necesitará en el futuro para comprar lo mismo. Usa el índice de precios real del BCH y, para los meses que faltan, la proyección del modelo estadístico.</p>
+  </div></div>
+  <section class="band wrap" style="padding-bottom:16px">
+    <div class="calc">
+      <div class="panel">
+        <div class="field"><label for="c-tipo">¿Qué quiere calcular?</label><select id="c-tipo">${Object.entries(TIPOS).map(([k,l]) => `<option value="${k}">${l}</option>`).join('')}</select></div>
+        <div class="field"><label for="c-monto">Monto en lempiras</label><div class="monto"><span>L</span><input id="c-monto" type="text" inputmode="decimal" value="${fmt(calc.monto,0)}" autocomplete="off"></div></div>
+        <div class="field"><div class="lb">Fecha inicial (cuando tenía ese monto)</div>${selFecha('c-a', calc.a)}</div>
+        <div class="field"><div class="lb">Fecha final (a la que quiere compararlo)</div>${selFecha('c-b', calc.b)}</div>
+        <div class="field" style="margin-bottom:0"><div class="lb">Atajos</div>
+          <div class="presets">
+            <button type="button" data-pre="2024-12|2025-12">Hace 1 año</button>
+            <button type="button" data-pre="2020-12|2025-12">Hace 5 años</button>
+            <button type="button" data-pre="2015-12|2025-12">Hace 10 años</button>
+            <button type="button" data-pre="2000-01|2025-12">Desde el 2000</button>
+            <button type="button" data-pre="2025-12|2026-12">Dentro de 12 meses</button>
+          </div>
+        </div>
+        <p class="note" style="margin-top:14px">El cálculo divide el IPC de la fecha final entre el de la inicial y multiplica por su monto. ${ayuda('ipc')}</p>
+      </div>
+      <div id="c-res"></div>
+    </div>
+  </section>
+  <section class="band wrap" style="padding-top:10px">
+    <h2 class="sec-t" style="font-size:22px">Así ha subido el costo de la vida cada año</h2>
+    <p class="sec-s">Inflación de diciembre a diciembre. Las barras verdes están dentro del rango meta del BCH (3 % a 5 %). La última barra, rayada, es la proyección. ${ayuda('meta')}</p>
+    <div class="panel" style="margin-top:16px"><div id="c-anios"></div>
+      <div class="legend" style="margin-top:12px"><span><i style="width:12px;height:12px;background:${TEMA === 'oscuro' ? '#7DB4F0' : '#6FA8E8'};border-radius:2px"></i>Menos de 3 %</span><span><i style="width:12px;height:12px;background:${GOOD};border-radius:2px"></i>De 3 % a 5 %</span><span><i style="width:12px;height:12px;background:#E8A317;border-radius:2px"></i>De 5 % a 8 %</span><span><i style="width:12px;height:12px;background:${BAD};border-radius:2px"></i>Más de 8 %</span></div>
+    </div>
+  </section>`;
+  const leerFecha = id => $(id+'-y').value + '-' + pad2(+$(id+'-m').value + 1);
+  const cambia = () => { calc.a = leerFecha('c-a'); calc.b = leerFecha('c-b'); calc.tipo = $('c-tipo').value; calcular(); };
+  ['c-a-m','c-a-y','c-b-m','c-b-y','c-tipo'].forEach(i => $(i).onchange = cambia);
+  $('c-tipo').value = calc.tipo;
+  const inp = $('c-monto');
+  inp.oninput = () => { const v = parseFloat(inp.value.replace(/[^0-9.]/g,'')); calc.monto = isFinite(v) ? v : 0; calcular(); };
+  inp.onblur = () => { inp.value = fmt(calc.monto,0); };
+  $('page-calc').querySelectorAll('[data-pre]').forEach(b => b.onclick = () => {
+    const [a,bb] = b.dataset.pre.split('|'); calc.a = a; calc.b = bb;
+    const pa = parseMes(a), pb = parseMes(bb);
+    $('c-a-m').value = pa.m; $('c-a-y').value = pa.y; $('c-b-m').value = pb.m; $('c-b-y').value = pb.y;
+    calcular();
+  });
+  pintarAnios();
+  calcMontada = true;
+}
+
+function pintarAnios(){
+  const T = serieIPC();
+  const val = f => f === '1999-12' ? 100 : T.v[T.f.indexOf(f)];
+  const ys = []; const y0 = parseMes(T.f[0]).y, y1 = parseMes(T.f[T.f.length-1]).y;
+  for (let y = y0; y <= y1; y++){
+    const a = val((y-1) + '-12'), b = val(y + '-12');
+    if (a && b) ys.push({y, v:(b/a-1)*100, proy: T.f.indexOf(y + '-12') >= T.real});
+  }
+  const mx = Math.max(...ys.map(o => o.v), 1);
+  const col = v => v < 3 ? (TEMA === 'oscuro' ? '#7DB4F0' : '#6FA8E8') : (v <= 5 ? GOOD : (v <= 8 ? '#E8A317' : BAD));
+  $('c-anios').innerHTML = `<div class="years">${ys.map(o => `<div class="c"><div class="b${o.proy ? ' pr' : ''}" style="height:${Math.max(2,o.v/mx*100).toFixed(1)}%;background-color:${col(o.v)}" ${tipA('Año ' + o.y + (o.proy ? ' (proyección)' : ''), 'Los precios ' + (o.proy ? 'subirían ' : 'subieron ') + fmt(o.v,1) + ' % entre diciembre de ' + (o.y-1) + ' y diciembre de ' + o.y + '.')}></div></div>`).join('')}</div>` +
+    `<div class="ylab">${ys.map(o => `<span>${String(o.y).slice(2)}</span>`).join('')}</div>`;
+}
+
+function calcular(){
+  const T = serieIPC();
+  const ia = T.f.indexOf(calc.a), ib = T.f.indexOf(calc.b), res = $('c-res');
+  if (ia < 0 || ib < 0){ res.innerHTML = '<div class="panel"><p class="lead">Elija fechas entre enero de 2000 y diciembre de 2026.</p></div>'; return; }
+  const m = calc.monto || 0;
+  const r = T.v[ib]/T.v[ia];
+  const meses = ib - ia, anios = Math.abs(meses)/12;
+  const acum = (r-1)*100;
+  const anual = anios >= 1/12 ? (Math.pow(r, 1/anios*(meses >= 0 ? 1 : -1)) - 1)*100 : null;
+  const eq = m*r, fa = mesSolo(calc.a), fb = mesSolo(calc.b);
+  const proy = ia >= T.real || ib >= T.real;
+  let rangoTxt = '';
+  if (ib >= T.real && ia < T.real && T.lo[ib] !== null) rangoTxt = ' Rango probable: de L ' + fmt(m*T.lo[ib]/T.v[ia],0) + ' a L ' + fmt(m*T.hi[ib]/T.v[ia],0) + '.';
+  const ultimoReal = mesSolo(T.f[T.real-1]);
+  let frase1, frase2 = '';
+  if (calc.tipo === 'ahorro'){
+    frase1 = 'Para comprar en <b>' + fb + '</b> lo mismo que compraba con L ' + fmt(m,0) + ' en <b>' + fa + '</b>, necesita <b>L ' + fmt(eq,0) + '</b>.';
+    if (meses > 0) frase2 = 'Si esos L ' + fmt(m,0) + ' se quedaron guardados sin rendimiento, en ' + fb + ' solo alcanzan para lo que en ' + fa + ' costaba L ' + fmt(m/r,0) + ': perdieron ' + fmt((1-1/r)*100,1) + ' % de su poder de compra.';
+  } else if (calc.tipo === 'salario'){
+    frase1 = 'Si su salario era L ' + fmt(m,0) + ' en <b>' + fa + '</b>, para conservar el mismo poder de compra en <b>' + fb + '</b> tendría que ser <b>L ' + fmt(eq,0) + '</b>.';
+    if (meses > 0) frase2 = 'Si sigue ganando L ' + fmt(m,0) + ', en ' + fb + ' su salario compra lo que en ' + fa + ' compraban L ' + fmt(m/r,0) + '.';
+  } else {
+    frase1 = 'Algo que costaba L ' + fmt(m,0) + ' en <b>' + fa + '</b> costaría <b>L ' + fmt(eq,0) + '</b> en <b>' + fb + '</b> si subiera igual que los precios en general.';
+    if (anual !== null && meses > 0) frase2 = 'Es un aumento de ' + fmt(anual,1) + ' % al año en promedio.';
+  }
+  const escala = Math.max(m, eq, 1);
+  const barra = (txt, v, c, tipx) => `<div class="r"><span>${txt}</span><div class="t"><i style="width:${(v/escala*100).toFixed(1)}%;background:${c}"></i></div><b style="font-family:var(--mono);font-weight:500" ${tipA(txt, tipx)}>L ${fmt(v,0)}</b></div>`;
+  res.innerHTML = `<div class="panel">
+    <p class="lead" style="margin:0;font-size:15px">${frase1}</p>
+    <div class="res-big" ${tipA('Monto equivalente', 'L ' + fmt(m,0) + ' × (IPC de ' + fb + ' ÷ IPC de ' + fa + ') = L ' + fmt(m,0) + ' × (' + fmt(T.v[ib],1) + ' ÷ ' + fmt(T.v[ia],1) + ') = L ' + fmt(eq,0) + '.')}>L ${fmt(eq,0)}</div>
+    ${rangoTxt ? '<p class="note" style="margin-top:2px">' + rangoTxt + '</p>' : ''}
+    ${proy ? `<span class="proj-chip" ${tipA('Incluye meses proyectados', 'Los datos reales llegan hasta ' + ultimoReal + '. Para los meses posteriores se usa la proyección del modelo estadístico, que es una estimación y no una certeza.')}>Incluye meses proyectados después de ${ultimoReal}</span>` : ''}
+    ${frase2 ? '<p class="lead" style="margin-top:12px">' + frase2 + '</p>' : ''}
+    <div class="res-grid">
+      <div ${tipA('Inflación acumulada', 'Cuánto subieron (o bajaron) los precios en total entre las dos fechas: IPC final ÷ IPC inicial − 1.')}><div class="k">Inflación acumulada</div><div class="v" style="color:${acum >= 0 ? BAD : GOOD}">${signed(acum,1)} %</div></div>
+      <div ${tipA('Inflación promedio anual', 'El ritmo anual constante que produciría la misma inflación acumulada en ese tiempo.')}><div class="k">Promedio por año</div><div class="v">${anual === null ? '—' : signed(anual,1) + ' %'}</div></div>
+      <div ${tipA('Tiempo entre fechas', 'Meses completos entre la fecha inicial y la final.')}><div class="k">Tiempo</div><div class="v">${Math.abs(meses) >= 12 ? fmt(anios,1) + ' años' : nMeses(Math.abs(meses))}</div></div>
+    </div>
+    <div class="cmp">
+      ${barra('Monto en ' + mesCorto(calc.a), m, NAIVE, 'El monto que tenía o el precio original.')}
+      ${barra('Equivalente en ' + mesCorto(calc.b), eq, ACCENT, 'Lo que necesita en la fecha final para comprar lo mismo.')}
+    </div>
+    <div id="c-graf" style="margin-top:8px"></div>
+    <p class="note">Índice de precios al consumidor entre las dos fechas. ${proy ? 'La parte punteada es proyección.' : ''}</p>
+  </div>`;
+  // Gráfico del IPC entre las dos fechas
+  const lo = Math.min(ia,ib), hi = Math.max(ia,ib);
+  if (hi > lo){
+    const finReal = Math.min(hi, T.real-1);
+    let hist, fechas, fc = [], fechasProy = [];
+    if (lo <= finReal){
+      hist = T.v.slice(lo, finReal+1); fechas = T.f.slice(lo, finReal+1);
+      for (let i = finReal+1; i <= hi; i++){ fc.push({valor:T.v[i], inferior:T.lo[i], superior:T.hi[i]}); fechasProy.push(T.f[i]); }
+    } else { hist = T.v.slice(lo, hi+1); fechas = T.f.slice(lo, hi+1); }
+    if (hist.length + fc.length >= 2){
+      const g = Grafico($('c-graf'), {fechas, hist, fechasProy, dec:1, decEje:0, bueno:false, margen:0,
+        series: fc.length ? [{id:'sarima', nombre:MODELOS.sarima.label, color:ACCENT, fc}] : [], etiqueta:'IPC entre ' + fa + ' y ' + fb, nombreReal:'IPC real'});
+      g.dibujar(fc.length, false);
+    }
+  }
+}
+
+function renderCalc(){
+  if (!calcMontada) montarCalc();
+  calcular();
+}
+
+// ---------------------------------------------------------------------------
+// Información
+// ---------------------------------------------------------------------------
+function renderInfo(){
+  const c = cifras(), I = DATOS.series.ipc, R = DATOS.series.rem;
+  const ipcF = I.historia.fechas, remF = R.historia.fechas;
+  const filasEx = [['ipc','Precios (IPC)'],['rem','Remesas']].map(([k,n]) => [1,3,6,12].map(h => {
+    const D = DATOS.series[k].desempeno[String(h)]; if (!D) return '';
+    const cel = (mk, col) => `<td class="num" ${tipA(n + ' · ' + nMeses(h), MODELOS[mk] ? MODELOS[mk].label + ': error promedio de ' + fmt(D[mk].MAPE,1) + ' %.' : 'Modelo ingenuo: error promedio de ' + fmt(D[mk].MAPE,1) + ' %.')}>${fmt(D[mk].MAPE,1)} %</td>`;
+    return `<tr><td>${n}</td><td>${nMeses(h)}</td>${cel('sarima')}${cel('xgb')}${cel('ingenuo')}</tr>`;
+  }).join('')).join('');
+  const orden = ['ipc','inflacion','poder','meta','remesas','transferencias','proyeccion','horizonte','modelos','sarima','xgboost','intervalo','shap','validacion','ingenuo','error','dm','valorp','estadistico','mae','rmse','mape','mase'];
+  $('page-info').innerHTML = `
+  <div class="pagehead"><div class="wrap in">
+    <h1 class="sec-t">Información</h1>
+    <p class="sec-s">Lo necesario para entender los números: qué miden, de dónde salen, cómo se proyectan y qué significan las palabras técnicas.</p>
+  </div></div>
+  <section class="band wrap" style="padding-bottom:10px">
+    <div class="info2">
+      <div class="info-card"><h3>¿Qué es el IPC y la inflación?</h3>
+        <p>El índice de precios al consumidor (IPC) resume cuánto cuesta una canasta de productos y servicios que compran los hogares. Se fijó en 100 en diciembre de 1999. La <b>inflación</b> es cuánto sube ese índice de un año a otro.</p>
+        <div class="dato"><b ${tipA('IPC más reciente', 'Valor del índice en ' + mesSolo(c.ipcF) + '. Significa que la canasta cuesta unas ' + fmt(c.ipcUlt/100,1) + ' veces lo que costaba en diciembre de 1999.')}>${fmt(c.ipcUlt,1)}</b><span>IPC de ${mesSolo(c.ipcF)}: las mismas cosas cuestan ${fmt(c.ipcUlt/100,1)} veces lo que costaban en diciembre de 1999.</span></div>
+        <div class="dato"><b ${tipA('Inflación de los últimos 12 meses', 'IPC de ' + mesSolo(c.ipcF) + ' dividido entre el de un año antes, menos 1.')}>${fmt(c.yoy,1)} %</b><span>Inflación de los 12 meses hasta ${mesSolo(c.ipcF)}.</span></div>
+        <div class="dato"><b ${tipA('Rango meta', 'El BCH busca una inflación alrededor de 4 %, con un margen de un punto hacia arriba o hacia abajo.')}>3 % a 5 %</b><span>Rango meta del BCH (4 % ± 1 punto). El banco espera volver a ese rango hacia finales de 2026, según <a href="${EXTERNO ? EXTERNO.url : FUENTES.bch}" target="_blank" rel="noopener">${EXTERNO ? esc(EXTERNO.fuente) : 'el BCH'}</a>.</span></div>
+      </div>
+      <div class="info-card"><h3>¿Qué son las remesas y por qué importan?</h3>
+        <p>Son el dinero que hondureños que viven en el exterior, sobre todo en Estados Unidos, envían a sus familias. Para muchos hogares son una parte importante del ingreso y para el país, una de las principales fuentes de dólares.</p>
+        <div class="dato"><b ${tipA('Remesas de 2025', 'Total de remesas familiares recibidas en 2025 según el reporte de Revista EyN con cifras del BCH. En 2024 fueron US$ 9,743 millones.')}>US$ 12,212 M</b><span>Remesas recibidas en 2025, un 25.3 % más que en 2024 (<a href="${FUENTES.eyn}" target="_blank" rel="noopener">Revista EyN</a>).</span></div>
+        <div class="dato"><b ${tipA('Peso en la economía', 'El mismo reporte indica que las remesas superan una cuarta parte del producto interno bruto (PIB) del país.')}>&gt; 25 %</b><span>Del producto interno bruto del país, según ese reporte.</span></div>
+        <div class="dato"><b ${tipA('Origen de las remesas', 'Según el mismo reporte, Estados Unidos es el principal país de origen.')}>98.5 %</b><span>Llegó desde Estados Unidos.</span></div>
+      </div>
+      <div class="info-card"><h3>De dónde salen los datos</h3>
+        <p>Las dos series son mensuales y oficiales, del Banco Central de Honduras: el IPC con base en diciembre de 1999 y los ingresos por transferencias corrientes de la balanza cambiaria, que incluyen las remesas ${ayuda('transferencias')}.</p>
+        <div class="dato"><b ${tipA('Período de estudio', 'Meses de datos que usaron los modelos para aprender y para el examen.')}>312</b><span>Meses por serie, de ${mesSolo(ipcF[0])} a ${mesSolo(ipcF[ipcF.length-1])}.</span></div>
+        <div class="dato"><b ${tipA('Diferencia con las remesas por departamento', 'La serie de transferencias corrientes resulta entre 3 % y 6.6 % mayor que el total de remesas por departamento, porque incluye otros envíos.')}>3 a 6.6 %</b><span>Es lo que superan las transferencias corrientes a las remesas publicadas por departamento. Por eso las cifras de aquí no coinciden exactamente con el total oficial.</span></div>
+        <div class="dato"><b>${DATOS.generado.split('-').reverse().join('/')}</b><span>Fecha de la última actualización de esta pantalla.</span></div>
+      </div>
+      <div class="info-card"><h3>Cómo se hicieron las proyecciones</h3>
+        <p><b>1. Dos modelos.</b> El modelo estadístico (SARIMA) y la inteligencia artificial (machine learning, XGBoost) proyectan los mismos meses.</p>
+        <p><b>2. Un examen.</b> A cada uno se le dieron los datos hasta cierto mes y se le pidió adivinar el siguiente, más de cien veces ${ayuda('validacion')}.</p>
+        <p><b>3. Una explicación.</b> El desglose de la fórmula (estadístico) y los valores SHAP (inteligencia artificial) muestran cuánto pesó cada dato ${ayuda('shap')}.</p>
+        <p><b>4. Un rango.</b> Cada proyección trae el rango en que probablemente caerá el valor real ${ayuda('intervalo')}.</p>
+      </div>
+    </div>
+  </section>
+  <section class="band wrap" style="padding-top:10px;padding-bottom:10px">
+    <h2 class="sec-t" style="font-size:22px">Resultados del examen</h2>
+    <p class="sec-s">Error promedio de cada modelo según el plazo. Menos es mejor. El modelo ingenuo solo repite el valor del mismo mes del año pasado ${ayuda('ingenuo')}.</p>
+    <div class="panel" style="margin-top:16px;overflow-x:auto"><table><thead><tr><th>Serie</th><th>Plazo</th><th class="num">Modelo estadístico</th><th class="num">Inteligencia artificial</th><th class="num">Ingenuo</th></tr></thead><tbody>${filasEx}</tbody></table></div>
+  </section>
+  <section class="band wrap" style="padding-top:10px;padding-bottom:10px">
+    <h2 class="sec-t" style="font-size:22px">Preguntas frecuentes</h2>
+    <div class="panel faq" style="margin-top:16px">
+      <details><summary>¿Por qué hay dos modelos?</summary><p>Porque son dos formas muy distintas de calcular el futuro. El modelo estadístico usa una fórmula conocida; la inteligencia artificial aprende patrones sin que nadie le diga la fórmula. Compararlos permite ver si la complejidad extra de la inteligencia artificial vale la pena. En estos datos, no siempre.</p></details>
+      <details><summary>¿Puedo confiar en las proyecciones?</summary><p>Sirven como referencia, no como promesa. Son más confiables a pocos meses y menos a 12 meses, y por eso cada cifra viene con su rango probable. Ningún modelo anticipa choques inesperados, como un salto en el precio de los combustibles. Vea la sección «Qué tan confiable es esta guía» en Recomendaciones.</p></details>
+      <details><summary>¿Por qué el rango de la inteligencia artificial a veces no rodea su línea?</summary><p>El rango se calcula con los errores que cometió en el examen. Si casi siempre se quedó corta, el rango se corre hacia arriba para corregir esa costumbre.</p></details>
+      <details><summary>¿Por qué la inteligencia artificial se queda plana en los precios?</summary><p>Los árboles de decisión de XGBoost no pueden proyectar valores más altos que los que vieron al aprender. Como el IPC siempre sube, cualquier valor futuro supera lo que conocen y la línea se aplana.</p></details>
+      <details><summary>¿Con qué frecuencia se actualiza?</summary><p>Cuando se agrega un dato nuevo y se vuelve a ejecutar el proceso de actualización, todo se recalcula: proyecciones, examen, explicaciones y esta pantalla.</p></details>
+      <details><summary>¿Es asesoría financiera?</summary><p>No. Es un prototipo académico y una orientación general. No sustituye las publicaciones ni las proyecciones oficiales del Banco Central de Honduras ni el consejo de un profesional.</p></details>
+    </div>
+  </section>
+  <section class="band wrap" style="padding-top:10px">
+    <h2 class="sec-t" style="font-size:22px">Glosario</h2>
+    <p class="sec-s">Las palabras de esta herramienta, explicadas sin tecnicismos. Las mismas definiciones aparecen al tocar el símbolo ?.</p>
+    <input class="buscar" id="g-buscar" type="search" placeholder="Buscar una palabra" aria-label="Buscar en el glosario" style="margin-top:14px">
+    <div class="gl" id="glosario"></div>
+    <div class="panel" style="margin-top:28px">
+      <h3>Acerca de este prototipo</h3>
+      <p class="lead">Herramienta académica que proyecta dos series mensuales oficiales del Banco Central de Honduras y explica cada resultado en lenguaje sencillo. Compara un modelo estadístico (SARIMA) con un modelo de inteligencia artificial (XGBoost). Especificaciones: precios, ${esc(I.especificacion_arima)}; remesas, ${esc(R.especificacion_arima)} sobre el logaritmo de la serie. El rango probable de la inteligencia artificial se construye con los percentiles 2.5 y 97.5 de sus errores en la validación de origen móvil.</p>
+      <p class="lead">Proyecto de tesis de maestría. Universidad Católica de Honduras, Dirección de Postgrado e Investigación, Tegucigalpa, 2026.</p>
+    </div>
+  </section>`;
+  const pintarGl = txt => {
+    const t = (txt || '').trim().toLowerCase();
+    const ks = orden.filter(k => !t || (GLOSARIO[k][0] + ' ' + GLOSARIO[k][1]).toLowerCase().includes(t));
+    $('glosario').innerHTML = ks.length ? ks.map(k => `<div><b>${esc(GLOSARIO[k][0])}</b>${esc(GLOSARIO[k][1])}${GLOSARIO[k][2] ? ' ' + esc(GLOSARIO[k][2]) : ''}</div>`).join('') : '<div>No hay palabras que coincidan.</div>';
+  };
+  pintarGl('');
+  $('g-buscar').oninput = e => { pintarGl(e.target.value); setTimeout(ajustarMarco, 40); };
+}
+
+// ---------------------------------------------------------------------------
+// Pie de página
+// ---------------------------------------------------------------------------
+function pintarPie(){
+  $('pie').innerHTML = `<div class="wrap"><div class="grid3">
+    <div><div class="nm">Horizonte</div><p style="margin:8px 0 0;max-width:46ch">Proyecciones explicables de los precios y las remesas de Honduras, con datos oficiales del Banco Central y dos modelos que compiten entre sí.</p></div>
+    <div><b>Secciones</b>${PAGINAS.map(([id,l]) => `<a href="#" data-ir="${id}" style="display:block;padding:2px 0">${l}</a>`).join('')}</div>
+    <div><b>Fuentes</b><a href="${FUENTES.bch}" target="_blank" rel="noopener" style="display:block;padding:2px 0">Banco Central de Honduras</a><a href="${FUENTES.eyn}" target="_blank" rel="noopener" style="display:block;padding:2px 0">Revista EyN, remesas 2025</a>${EXTERNO ? `<a href="${EXTERNO.url}" target="_blank" rel="noopener" style="display:block;padding:2px 0">Infobae, política monetaria 2026</a>` : ''}</div>
+  </div><div class="lgl">Prototipo con fines académicos. No sustituye las publicaciones ni las proyecciones oficiales del Banco Central de Honduras. Universidad Católica de Honduras, 2026.</div></div>`;
+}
+
+// ---------------------------------------------------------------------------
+// Arranque y pantalla de carga
+// ---------------------------------------------------------------------------
+if (!DATOS) {
+  document.body.innerHTML = '<p style="padding:24px">No hay datos. Ejecute <code>python ejecutar_todo.py</code>.</p>';
+} else {
+  let tinicial = leer('horizonte-tema');
+  if (!tinicial){ try { tinicial = matchMedia('(prefers-color-scheme: dark)').matches ? 'oscuro' : 'claro'; } catch(e){ tinicial = 'claro'; } }
+  ponerTema(tinicial, false);
+  $('btn-tema').addEventListener('click', () => { const n = TEMA === 'oscuro' ? 'claro' : 'oscuro'; guardar('horizonte-tema', n); ponerTema(n, true); });
+  fijarNav();
+  const hash = (location.hash || '').replace('#','');
+  irA(PAGINAS.some(p => p[0] === hash) ? hash : 'inicio', {silencioso:true});
+  const carga = $('cargando');
+  const pasos = ['Cargando datos del Banco Central de Honduras…','Preparando los dos modelos…','Calculando el rango probable…','Listo'];
+  let pi = 0;
+  const iv = setInterval(() => { pi = Math.min(pi+1, pasos.length-1); const p = $('paso-carga'); if (p) p.textContent = pasos[pi]; }, 420);
+  let salio = false;
+  const salir = () => {
+    if (salio) return; salio = true;
+    clearInterval(iv);
+    carga.classList.add('fuera');
+    if (st.pagina === 'inicio') renderInicio(true);
+    setTimeout(() => carga.remove(), 700);
+  };
+  carga.addEventListener('click', salir);
+  setTimeout(salir, reduce() ? 150 : 1800);
+  let rt;
+  window.addEventListener('resize', () => { clearTimeout(rt); rt = setTimeout(() => {
+    if (st.pagina === 'proy') render(true);
+    if (st.pagina === 'inicio') renderInicio(false);
+    if (st.pagina === 'calc') calcular();
+    ajustarMarco();
+  }, 180); });
+  try { new ResizeObserver(() => ajustarMarco()).observe($('app')); } catch(e){}
+}
+</script>
+</body>
+</html>

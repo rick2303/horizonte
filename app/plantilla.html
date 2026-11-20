@@ -894,6 +894,9 @@ function fijarNav(){
   try { f = window.frameElement; P = f && f.ownerDocument.defaultView; if (!P || !P.document.body) return; } catch(e){ return; }
   const nav = document.querySelector('.topnav');
   nav.style.position = 'relative'; nav.style.top = 'auto';
+  // En pantallas táctiles el scroll con inercia llega tarde al marco y la barra
+  // salta sobre el contenido: ahí la barra se queda arriba y se desplaza con la página.
+  if (P.matchMedia && P.matchMedia('(pointer:coarse)').matches) return;
   let pend = false;
   const act = () => { pend = false; try {
     const h = P.document.querySelector('[data-testid="stHeader"]');
